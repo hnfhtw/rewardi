@@ -171,7 +171,9 @@ main.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/urlapi.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WebServer.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/bootwifi/BootWiFi.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/JSON.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/json/cJSON/cJSON.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
 
@@ -516,4 +518,8 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/Web
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/bootwifi/BootWiFi.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/JSON.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/json/cJSON/cJSON.h:
 /home/Harald.Netzer/esp/rewardi/main/./main.cpp:

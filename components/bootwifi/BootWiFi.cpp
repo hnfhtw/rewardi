@@ -293,8 +293,12 @@ void BootWiFi::bootWiFi2() {
 			);
 		  
       m_apConnectionStatus = m_wifi.connectAP(connectionInfo.ssid, connectionInfo.password);   // Try to connect to the access point.
-      m_completeSemaphore.give();                                                              // end the boot process so we don't hang...
-
+      if(m_apConnectionStatus == ESP_OK){
+    	  m_completeSemaphore.give();                                                              // end the boot process so we don't hang...
+      }
+      else{
+    	  m_wifi.startAP(m_ssid, m_password);		// HN-CHECK -> start own access point if configured WLAN is not available
+      }
 		} else {
 			// We do NOT have connection information.  Let us now become an access
 			// point that serves up a web server and allow a browser user to specify
