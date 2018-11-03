@@ -1073,7 +1073,7 @@ END GROUP
  *(.jcr)
                 0x3fff001c                _data_end = ABSOLUTE (.)
 
-.dram0.rodata   0x3fff001c     0x16a4
+.dram0.rodata   0x3fff001c     0x16a8
                 0x3fff001c                _rodata_start = ABSOLUTE (.)
  *(.rodata)
  .rodata        0x3fff001c       0x14 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_init.o)
@@ -1087,78 +1087,78 @@ END GROUP
                                 0x5ad (size before relaxing)
  *fill*         0x3fff0619        0x3 
  .rodata.str1.4
-                0x3fff061c      0x3ca C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_init.o)
-                                0x3d2 (size before relaxing)
- *fill*         0x3fff09e6        0x2 
+                0x3fff061c      0x3ce C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_init.o)
+                                0x3d6 (size before relaxing)
+ *fill*         0x3fff09ea        0x2 
  .rodata.__func__$4362
-                0x3fff09e8       0x10 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_init.o)
+                0x3fff09ec       0x10 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_init.o)
  .rodata.str1.4
-                0x3fff09f8      0x28e C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_flash.o)
- *fill*         0x3fff0c86        0x2 
+                0x3fff09fc      0x28e C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_flash.o)
+ *fill*         0x3fff0c8a        0x2 
  .rodata.str1.4
-                0x3fff0c88      0x45a C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(esp_image_format.o)
+                0x3fff0c8c      0x45a C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(esp_image_format.o)
                                 0x49a (size before relaxing)
- *fill*         0x3fff10e2        0x2 
+ *fill*         0x3fff10e6        0x2 
  .rodata.str1.4
-                0x3fff10e4      0x163 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(flash_partitions.o)
- *fill*         0x3fff1247        0x1 
+                0x3fff10e8      0x163 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(flash_partitions.o)
+ *fill*         0x3fff124b        0x1 
  .rodata.str1.4
-                0x3fff1248       0xe8 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_sha.o)
+                0x3fff124c       0xe8 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_sha.o)
  .rodata.padding$3047
-                0x3fff1330       0x40 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_sha.o)
+                0x3fff1334       0x40 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_sha.o)
  .rodata.__func__$3043
-                0x3fff1370       0x19 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_sha.o)
- *fill*         0x3fff1389        0x3 
+                0x3fff1374       0x19 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_sha.o)
+ *fill*         0x3fff138d        0x3 
  .rodata.__func__$3023
-                0x3fff138c       0x17 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_sha.o)
- *fill*         0x3fff13a3        0x1 
+                0x3fff1390       0x17 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/bootloader_support\libbootloader_support.a(bootloader_sha.o)
+ *fill*         0x3fff13a7        0x1 
  .rodata.str1.4
-                0x3fff13a4      0x274 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
+                0x3fff13a8      0x274 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
                                 0x271 (size before relaxing)
  .rodata.rtc_clk_xtal_freq_estimate
-                0x3fff1618       0x64 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
+                0x3fff161c       0x64 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
  .rodata.rtc_clk_cpu_freq_value
-                0x3fff167c       0x14 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
+                0x3fff1680       0x14 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
  .rodata.__func__$2844
-                0x3fff1690       0x17 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
- *fill*         0x3fff16a7        0x1 
+                0x3fff1694       0x17 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
+ *fill*         0x3fff16ab        0x1 
  .rodata.__func__$2829
-                0x3fff16a8       0x15 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
+                0x3fff16ac       0x15 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/bootloader/soc\libsoc.a(rtc_clk.o)
  *(.gnu.linkonce.r.*)
  *(.rodata1)
-                0x3fff16bd                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
+                0x3fff16c1                __XT_EXCEPTION_TABLE_ = ABSOLUTE (.)
  *(.xt_except_table)
  *(.gcc_except_table)
  *(.gnu.linkonce.e.*)
  *(.gnu.version_r)
  *(.eh_frame)
-                0x3fff16c0                . = ((. + 0x3) & 0xfffffffc)
- *fill*         0x3fff16bd        0x3 
-                0x3fff16c0                __init_array_start = ABSOLUTE (.)
+                0x3fff16c4                . = ((. + 0x3) & 0xfffffffc)
+ *fill*         0x3fff16c1        0x3 
+                0x3fff16c4                __init_array_start = ABSOLUTE (.)
  *crtbegin.*(.ctors)
  *(EXCLUDE_FILE(*crtend.*) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x3fff16c0                __init_array_end = ABSOLUTE (.)
+                0x3fff16c4                __init_array_end = ABSOLUTE (.)
  *crtbegin.*(.dtors)
  *(EXCLUDE_FILE(*crtend.*) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x3fff16c0                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
+                0x3fff16c4                __XT_EXCEPTION_DESCS_ = ABSOLUTE (.)
  *(.xt_except_desc)
  *(.gnu.linkonce.h.*)
-                0x3fff16c0                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
+                0x3fff16c4                __XT_EXCEPTION_DESCS_END__ = ABSOLUTE (.)
  *(.xt_except_desc_end)
  *(.dynamic)
  *(.gnu.version_d)
-                0x3fff16c0                _rodata_end = ABSOLUTE (.)
-                0x3fff16c0                _lit4_start = ABSOLUTE (.)
+                0x3fff16c4                _rodata_end = ABSOLUTE (.)
+                0x3fff16c4                _lit4_start = ABSOLUTE (.)
  *(*.lit4)
  *(.lit4.*)
  *(.gnu.linkonce.lit4.*)
-                0x3fff16c0                _lit4_end = ABSOLUTE (.)
-                0x3fff16c0                . = ALIGN (0x4)
-                0x3fff16c0                _heap_start = ABSOLUTE (.)
+                0x3fff16c4                _lit4_end = ABSOLUTE (.)
+                0x3fff16c4                . = ALIGN (0x4)
+                0x3fff16c4                _heap_start = ABSOLUTE (.)
                 [!provide]                PROVIDE (abort, 0x4000bba4)
                 [!provide]                PROVIDE (Add2SelfBigHex256, 0x40015b7c)
                 [!provide]                PROVIDE (AddBigHex256, 0x40015b28)

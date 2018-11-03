@@ -13,7 +13,6 @@
 User::User(){
 	m_userID	= 0;
 	m_rewardi	= 0.0;
-	m_boxCode   = 0;
 }
 
 

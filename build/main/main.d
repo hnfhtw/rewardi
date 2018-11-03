@@ -26,6 +26,7 @@ main.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/alloca.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/assert.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log_internal.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/bootwifi/BootWiFi.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WiFi.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mdns/include/mdns.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/tcpip_adapter/include/tcpip_adapter.h \
@@ -116,7 +117,6 @@ main.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WiFiEventHandler.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_event_loop.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_event.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WiFiEventHandler.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/HttpServer.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/SockServ.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/Socket.h \
@@ -160,20 +160,12 @@ main.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WebSocket.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/HttpParser.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/HttpResponse.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/RESTClient.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/curl.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/curlver.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/system.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/posix/sys/socket.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/easy.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/multi.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/curl.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/urlapi.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WebServer.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/bootwifi/BootWiFi.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/JSON.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/json/cJSON/cJSON.h
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/Socket.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
 
@@ -226,6 +218,8 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/includ
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/assert.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log_internal.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/bootwifi/BootWiFi.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WiFi.h:
 
@@ -407,8 +401,6 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_event.h:
 
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WiFiEventHandler.h:
-
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/HttpServer.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/SockServ.h:
@@ -495,31 +487,15 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/Htt
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/HttpResponse.h:
 
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/RESTClient.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/curl.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/curlver.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/system.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/posix/sys/socket.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/easy.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/multi.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/curl.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/curl/include/curl/urlapi.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/WebServer.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/bootwifi/BootWiFi.h:
-
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h:
 
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/JSON.h:
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h:
 
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/json/cJSON/cJSON.h:
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/Socket.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h:
 /home/Harald.Netzer/esp/rewardi/main/./main.cpp:

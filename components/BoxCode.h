@@ -8,6 +8,8 @@
 #ifndef COMPONENTS_BOXCODE_H_
 #define COMPONENTS_BOXCODE_H_
 
+#include <stdint.h>
+
 class BoxCode {
 public:
 	BoxCode();

@@ -32,7 +32,7 @@ bool BoxCode::parseCode(){
  * @brief Compare if *pCode and m_boxCode are equal (overload == operator)
  */
 bool BoxCode::compareCode(BoxCode* pCode){
-	if(m_isCodeSet && (m_boxCode == *pCode)){
+	if(m_isCodeSet && (m_boxCode == pCode->m_boxCode)){
 		return true;
 	}
 	return false;

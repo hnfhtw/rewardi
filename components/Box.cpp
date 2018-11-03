@@ -15,6 +15,7 @@ Box::Box(){
 	m_pOwner			= NULL;
 	m_backendURL  		= "";
 	m_rewardiPerOpen 	= 0.0;
+	m_trustNumber		= "1234ABCD";
 }
 
 
@@ -83,3 +84,9 @@ double Box::getRewardiPerOpen(){
 	return m_rewardiPerOpen;
 }
 
+/**
+ * @brief xx
+ */
+std::string Box::getTrustNumber(){
+	return m_trustNumber;
+}
