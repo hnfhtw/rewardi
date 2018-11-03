@@ -68,6 +68,9 @@ JsonObject JSON::parseObject(std::string text) {
 	return JsonObject(cJSON_Parse(text.c_str()));
 } // parseObject
 
+JsonObject JSON::parseObject(const char *text) {
+	return JsonObject(cJSON_Parse(text));
+} // parseObject
 
 JsonArray::JsonArray(cJSON* node) {
 	m_node = node;

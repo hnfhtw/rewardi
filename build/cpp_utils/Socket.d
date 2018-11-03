@@ -118,7 +118,8 @@ Socket.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/error.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/net.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/net_sockets.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ssl.h
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ssl.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/certs.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
 
@@ -357,4 +358,6 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedt
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/net_sockets.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ssl.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/certs.h:
 /home/Harald.Netzer/esp/rewardi/components/cpp_utils/./Socket.cpp:

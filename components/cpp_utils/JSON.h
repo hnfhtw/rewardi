@@ -24,6 +24,7 @@ public:
 	static void       deleteObject(JsonObject jsonObject);
 	static void       deleteArray(JsonArray jsonArray);
 	static JsonObject parseObject(std::string text);
+	static JsonObject parseObject(const char *text);
 	static JsonArray  parseArray(std::string text);
 
 }; // JSON

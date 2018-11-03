@@ -90,7 +90,7 @@ public:
 	void sendTo(const uint8_t* data, size_t length, struct sockaddr* pAddr);
 	void setSSL(bool sslValue = true);
 	std::string toString();
-
+	void sslHandshake();
 private:
 	int  m_sock;     // The underlying TCP/IP socket
 	bool m_useSSL;   // Should we use SSL
@@ -101,7 +101,7 @@ private:
 	mbedtls_ssl_config       m_conf;
 	mbedtls_x509_crt         m_srvcert;
 	mbedtls_pk_context       m_pkey;
-	void sslHandshake();
+	//void sslHandshake();
 
 };
 

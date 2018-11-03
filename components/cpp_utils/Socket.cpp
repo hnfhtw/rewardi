@@ -25,6 +25,8 @@
 #include "sdkconfig.h"
 #include "Socket.h"
 
+#include "mbedtls/certs.h"
+
 static const char* LOG_TAG = "Socket";
 
 #undef bind
@@ -352,7 +354,15 @@ size_t Socket::receive(uint8_t* data, size_t length, bool exact) {
 		int rc;
 		if (getSSL()) {
 			do {
-				rc = mbedtls_ssl_read(&m_sslContext, data, length);
+				int bytesAvailable = mbedtls_ssl_get_bytes_avail(&m_sslContext);
+				ESP_LOGD(LOG_TAG, " bytes available = %d", bytesAvailable);
+				if(!exact){
+					rc = mbedtls_ssl_read(&m_sslContext, data, length);
+				}
+				else{
+					rc = mbedtls_ssl_read(&m_sslContext, data, length);
+				}
+
 				ESP_LOGD(LOG_TAG, "rc=%d, MBEDTLS_ERR_SSL_WANT_READ=%d", rc, MBEDTLS_ERR_SSL_WANT_READ);
 			} while (rc == MBEDTLS_ERR_SSL_WANT_WRITE || rc == MBEDTLS_ERR_SSL_WANT_READ);
 		} else {
@@ -417,8 +427,9 @@ int Socket::send(const uint8_t* data, size_t length) const {
 	//GeneralUtils::hexDump(data, length);
 	int rc = ERR_OK;
 	while (length > 0) {
+		ESP_LOGD(LOG_TAG, "send: loop");
 		if (getSSL()) {
-			rc = mbedtls_ssl_write((mbedtls_ssl_context*)&m_sslContext, data, length);
+			rc = mbedtls_ssl_write((mbedtls_ssl_context*)&m_sslContext, (const unsigned char *) data, length);
 			// retry with same parameters if MBEDTLS_ERR_SSL_WANT_WRITE or MBEDTLS_ERR_SSL_WANT_READ
 			if ((rc != MBEDTLS_ERR_SSL_WANT_WRITE) && (rc != MBEDTLS_ERR_SSL_WANT_READ)) {
 				if (rc < 0) {
@@ -508,12 +519,12 @@ void Socket::setReuseAddress(bool value) {
  * @param [in] sslValue True if we wish to use SSL.
  */
 void Socket::setSSL(bool sslValue) {
-  const char* pers = "ssl_server";
+  const char* pers = "ssl_client";			// HN-Check
 	ESP_LOGD(LOG_TAG, ">> setSSL: %s", sslValue?"Yes":"No");
 	m_useSSL = sslValue;
 
 	if (sslValue) {
-		char *pvtKey = SSLUtils::getKey();
+		/*char *pvtKey = SSLUtils::getKey();
 		char *certificate = SSLUtils::getCertificate();
 		if (pvtKey == nullptr) {
 			ESP_LOGE(LOG_TAG, "No private key file");
@@ -522,17 +533,17 @@ void Socket::setSSL(bool sslValue) {
 		if (certificate == nullptr) {
 			ESP_LOGE(LOG_TAG, "No certificate file");
 			return;
-		}
-
+		}*/
 		mbedtls_net_init(&m_sslSock);
 		mbedtls_ssl_init(&m_sslContext);
 		mbedtls_ssl_config_init(&m_conf);
 		mbedtls_x509_crt_init(&m_srvcert);
-		mbedtls_pk_init(&m_pkey);
+		//mbedtls_pk_init(&m_pkey);
 		mbedtls_entropy_init(&m_entropy);
 		mbedtls_ctr_drbg_init(&m_ctr_drbg);
 
-		int ret = mbedtls_x509_crt_parse(&m_srvcert, (unsigned char *) certificate, strlen(certificate) + 1);
+		//int ret = mbedtls_x509_crt_parse(&m_srvcert, (unsigned char *) certificate, strlen(certificate) + 1);
+		/*int ret = mbedtls_x509_crt_parse(&m_srvcert, (unsigned char *) mbedtls_test_cas_pem,  mbedtls_test_cas_pem_len);
 		if (ret != 0) {
 			ESP_LOGD(LOG_TAG, "mbedtls_x509_crt_parse returned 0x%x", -ret);
 			goto exit;
@@ -542,16 +553,16 @@ void Socket::setSSL(bool sslValue) {
 		if (ret != 0) {
 			ESP_LOGD(LOG_TAG, "mbedtls_pk_parse_key returned 0x%x", -ret);
 			goto exit;
-		}
+		}*/
 
-		ret = mbedtls_ctr_drbg_seed(&m_ctr_drbg, mbedtls_entropy_func, &m_entropy, (const unsigned char*) pers, strlen(pers));
+		int ret = mbedtls_ctr_drbg_seed(&m_ctr_drbg, mbedtls_entropy_func, &m_entropy, (const unsigned char*) pers, strlen(pers));
 		if (ret != 0) {
 			ESP_LOGD(LOG_TAG, "! mbedtls_ctr_drbg_seed returned %d\n", ret);
 			goto exit;
 		}
 
 		ret = mbedtls_ssl_config_defaults(&m_conf,
-				MBEDTLS_SSL_IS_SERVER,
+				MBEDTLS_SSL_IS_CLIENT,			// HN-Check
 				MBEDTLS_SSL_TRANSPORT_STREAM,
 				MBEDTLS_SSL_PRESET_DEFAULT);
 		if (ret != 0) {
@@ -563,11 +574,11 @@ void Socket::setSSL(bool sslValue) {
 		mbedtls_ssl_conf_rng(&m_conf, mbedtls_ctr_drbg_random, &m_ctr_drbg);
 
 //	mbedtls_ssl_conf_ca_chain( &m_conf, m_srvcert.next, NULL);
-		ret = mbedtls_ssl_conf_own_cert(&m_conf, &m_srvcert, &m_pkey);
+		/*ret = mbedtls_ssl_conf_own_cert(&m_conf, &m_srvcert, &m_pkey);
 		if (ret != 0) {
 			ESP_LOGD(LOG_TAG, "mbedtls_ssl_conf_own_cert returned %d\n\n", ret);
 			goto exit;
-		}
+		}*/
 
 		mbedtls_ssl_conf_dbg(&m_conf, my_debug, nullptr);
 #ifdef CONFIG_MBEDTLS_DEBUG
@@ -579,6 +590,12 @@ void Socket::setSSL(bool sslValue) {
 			ESP_LOGD(LOG_TAG, "mbedtls_ssl_setup returned %d\n\n", ret);
 			goto exit;
 		}
+
+		if( ( ret = mbedtls_ssl_set_hostname(&m_sslContext, NULL ) ) != 0 )			// HN-Check
+		    {
+		        mbedtls_printf( " failed\n  ! mbedtls_ssl_set_hostname returned %d\n\n", ret );
+		        goto exit;
+		}
 	}
 exit:
 	return;
@@ -589,8 +606,9 @@ exit:
  * @brief perform the SSL handshake
  */
 void Socket::sslHandshake() {
+	m_sslSock.fd = m_sock;		// HN-Check
 	ESP_LOGD(LOG_TAG, ">> sslHandshake: sock: %d", m_sslSock.fd);
-	mbedtls_ssl_session_reset(&m_sslContext);
+	//mbedtls_ssl_session_reset(&m_sslContext);
 	ESP_LOGD(LOG_TAG, " - Reset complete");
 	mbedtls_ssl_set_bio(&m_sslContext, &m_sslSock, mbedtls_net_send, mbedtls_net_recv, NULL);
 
