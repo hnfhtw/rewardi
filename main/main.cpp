@@ -34,7 +34,8 @@ void app_main(void)
 
 	// Create TCP socket for backend connection
 	backendSocket.createSocket(false);
-	char* addr = "34.209.17.111";		 // websocket echo
+	//char* addr = "34.209.17.111";		 // websocket echo
+	char* addr = "https://demos.kaazing.com/echo";
 	backendSocket.setSSL(true);
 	backendSocket.connect(addr, 443);
 	backendSocket.sslHandshake();

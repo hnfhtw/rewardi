@@ -119,7 +119,10 @@ Socket.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/net.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/net_sockets.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ssl.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/certs.h
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/certs.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/posix/netdb.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/lwip/netdb.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/lwip/dns.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
 
@@ -360,4 +363,10 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedt
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/ssl.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/certs.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/posix/netdb.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/lwip/netdb.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/lwip/dns.h:
 /home/Harald.Netzer/esp/rewardi/components/cpp_utils/./Socket.cpp:

@@ -27,6 +27,9 @@
 
 #include "mbedtls/certs.h"
 
+#include <netdb.h>
+#include <lwip/dns.h>
+
 static const char* LOG_TAG = "Socket";
 
 #undef bind
@@ -42,6 +45,8 @@ static void my_debug(
    ((void) ctx);
    printf("%s:%04d: %s", file, line, str);
 }
+
+static int resolve_dns(const char *host, struct sockaddr_in *ip);
 
 Socket::Socket() {
 	m_sock   = -1;
@@ -192,9 +197,16 @@ int Socket::connect(struct in_addr address, uint16_t port) {
  * @return Success or failure of the connection.
  */
 int Socket::connect(char* strAddress, uint16_t port) {
-	struct in_addr address;
-	inet_pton(AF_INET, strAddress, &address);
-	return connect(address, port);
+	struct sockaddr_in address;
+
+    //if stream_host is not ip address, resolve it AF_INET,servername,&serveraddr.sin_addr
+    if (inet_pton(AF_INET, strAddress, &address.sin_addr) != 1) {
+        if (resolve_dns(strAddress, &address) < 0) {
+            return -1;
+        }
+    }
+    ESP_LOGD(LOG_TAG, "resolved IP adresse = %d", (uint32_t) address.sin_addr.s_addr);
+	return connect(address.sin_addr, port);
 }
 
 
@@ -677,4 +689,29 @@ SocketInputRecordStreambuf::int_type SocketInputRecordStreambuf::underflow() {
 
 SocketException::SocketException(int myErrno) {
 	m_errno = myErrno;
+}
+
+static int resolve_dns(const char *host, struct sockaddr_in *ip) {
+
+	ip_addr_t address;
+
+	dns_gethostbyname(host, &address, NULL, NULL);
+
+
+    /*struct hostent *he;
+    struct in_addr **addr_list;
+    he = gethostbyname(host);
+    if (he == NULL) {
+        return ESP_FAIL;
+    }
+    addr_list = (struct in_addr **)he->h_addr_list;
+    if (addr_list[0] == NULL) {
+        return ESP_FAIL;
+    }
+    ip->sin_family = AF_INET;
+    memcpy(&ip->sin_addr, addr_list[0], sizeof(ip->sin_addr));*/
+	ip4_addr_t test = (ip4_addr_t) address;
+	struct ip4_addr ip_addr = (struct ip4_addr) test;
+	ip->sin_addr.s_addr = ip_addr.addr;
+    return ESP_OK;
 }
