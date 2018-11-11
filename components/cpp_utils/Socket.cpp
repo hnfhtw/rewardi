@@ -202,6 +202,7 @@ int Socket::connect(char* strAddress, uint16_t port) {
     //if stream_host is not ip address, resolve it AF_INET,servername,&serveraddr.sin_addr
     if (inet_pton(AF_INET, strAddress, &address.sin_addr) != 1) {
         if (resolve_dns(strAddress, &address) < 0) {
+        	ESP_LOGD(LOG_TAG, "IP adress not resolved!");
             return -1;
         }
     }
@@ -695,10 +696,10 @@ static int resolve_dns(const char *host, struct sockaddr_in *ip) {
 
 	ip_addr_t address;
 
-	dns_gethostbyname(host, &address, NULL, NULL);
+	//dns_gethostbyname(host, &address, NULL, NULL);
 
 
-    /*struct hostent *he;
+    struct hostent *he;
     struct in_addr **addr_list;
     he = gethostbyname(host);
     if (he == NULL) {
@@ -709,9 +710,9 @@ static int resolve_dns(const char *host, struct sockaddr_in *ip) {
         return ESP_FAIL;
     }
     ip->sin_family = AF_INET;
-    memcpy(&ip->sin_addr, addr_list[0], sizeof(ip->sin_addr));*/
-	ip4_addr_t test = (ip4_addr_t) address;
-	struct ip4_addr ip_addr = (struct ip4_addr) test;
-	ip->sin_addr.s_addr = ip_addr.addr;
+    memcpy(&ip->sin_addr, addr_list[0], sizeof(ip->sin_addr));
+	//ip4_addr_t test = (ip4_addr_t) address;
+	//struct ip4_addr ip_addr = (struct ip4_addr) test;
+	//ip->sin_addr.s_addr = ip_addr.addr;
     return ESP_OK;
 }
