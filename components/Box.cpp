@@ -38,10 +38,8 @@ void Box::setOwner(User* pOwner){
 /**
  * @brief xx
  */
-bool Box::setBackendURL(std::string backendURL){
-	// check if backendURL is reachable - then set m_backendURL, otherwise return false
+void Box::setBackendURL(std::string backendURL){
 	m_backendURL = backendURL;		// use string copy function??
-	return true;
 }
 
 

@@ -25,6 +25,10 @@
 #include "sdkconfig.h"
 #include "selectAP.h"
 
+// Please note: if the html file wants to be changed (selectAP.html) the header file selectAP.h (char* representation of the html file)
+// needs to be re-generated in msys2 (or other linux) shell with: xxd -i selectAP.html > selectAP.h
+
+
 // If the structure of a record saved for a subsequent reboot changes
 // then consider using semver to change the version number or else
 // we may try and boot with the wrong data.
@@ -35,7 +39,9 @@ uint32_t g_version=0x0100;
 #define BOOTWIFI_NAMESPACE  "bootwifi"         // Namespace in NVS for bootwifi
 #define SSID_SIZE           (32)               // Maximum SSID size
 #define PASSWORD_SIZE       (64)               // Maximum password size
-
+#define KEY_BACKENDURL_INFO  "backendurlInfo" // Key used in NVS for backend url info
+#define BACKENDURL_NAMESPACE "backendurl"     // Namespace in NVS for backend url
+#define BACKENDURL_SIZE			(64)			   // Maximum backend url size
 
 /**
  * The information about a WiFi access point connection.
@@ -46,11 +52,19 @@ typedef struct {
 	tcpip_adapter_ip_info_t ipInfo; // Optional static IP information
 } connection_info_t;
 
+/**
+ * Backend URL information
+ */
+typedef struct {
+	char url[BACKENDURL_SIZE];
+} backend_url_info_t;
+
 //static bootwifi_callback_t g_callback = NULL; // Callback function to be invoked when we have finished.
 
 
 // Forward declarations
 static void saveConnectionInfo(connection_info_t *pConnectionInfo);
+static void saveBackendUrlInfo(backend_url_info_t *pBackendUrlInfo);
 
 static const char LOG_TAG[] = "bootwifi";
 
@@ -96,14 +110,54 @@ static int getConnectionInfo(connection_info_t *pConnectionInfo) {
 
 } // getConnectionInfo
 
+/**
+ * Retrieve the backend url info.  A rc==0 means ok.
+ */
+static int getBackendUrlInfo(backend_url_info_t *pBackendUrlInfo) {
+	ESP_LOGD(LOG_TAG, ">> getBackendUrlInfo");
+	size_t     size;
+	uint32_t   version;
+
+	NVS myNamespace(BACKENDURL_NAMESPACE);
+	myNamespace.get(KEY_VERSION, version);
+
+	// Check the versions match
+	if ((version & 0xff00) != (g_version & 0xff00)) {
+		ESP_LOGD(LOG_TAG, "Incompatible versions ... current is %x, found is %x", version, g_version);
+		return -1;
+	}
+
+	size = sizeof(backend_url_info_t);
+	myNamespace.get(KEY_BACKENDURL_INFO, (uint8_t*)pBackendUrlInfo, size);
+
+	// Do a sanity check on the backend url
+	if (strlen(pBackendUrlInfo->url) == 0) {
+		ESP_LOGD(LOG_TAG, "NULL backend url detected");
+		return -1;
+	}
+	ESP_LOGD(LOG_TAG, "<< getBackendUrlInfo");
+	return 0;
+
+} // getBackendUrlInfo
+
 
 /**
  * Save our connection info for retrieval on a subsequent restart.
  */
 static void saveConnectionInfo(connection_info_t *pConnectionInfo) {
 	dumpConnectionInfo(pConnectionInfo);
-	NVS myNamespace(BOOTWIFI_NAMESPACE);
+	NVS myNamespace(BOOTWIFI_NAMESPACE, NVS_READWRITE);
 	myNamespace.set(KEY_CONNECTION_INFO, (uint8_t*)pConnectionInfo, sizeof(connection_info_t));
+	myNamespace.set(KEY_VERSION, g_version);
+	myNamespace.commit();
+} // setConnectionInfo
+
+/**
+ * Save backend url info for retrieval on a subsequent restart.
+ */
+static void saveBackendUrlInfo(backend_url_info_t *pBackendUrlInfo) {
+	NVS myNamespace(BACKENDURL_NAMESPACE, NVS_READWRITE);
+	myNamespace.set(KEY_BACKENDURL_INFO, (uint8_t*)pBackendUrlInfo, sizeof(backend_url_info_t));
 	myNamespace.set(KEY_VERSION, g_version);
 	myNamespace.commit();
 } // setConnectionInfo
@@ -153,6 +207,8 @@ static void processForm(HttpRequest* pRequest, HttpResponse* pResponse) {
 	connection_info_t connectionInfo;
 	copyData((uint8_t*)connectionInfo.ssid, SSID_SIZE, formMap["ssid"]);
 	copyData((uint8_t*)connectionInfo.password, PASSWORD_SIZE, formMap["password"]);
+	backend_url_info_t backendurlInfo;
+	copyData((uint8_t*)backendurlInfo.url, BACKENDURL_SIZE, formMap["backendurl"]);
 
 	try {
 		std::string ipStr = formMap.at("ip");
@@ -196,9 +252,10 @@ static void processForm(HttpRequest* pRequest, HttpResponse* pResponse) {
 	ESP_LOGD(LOG_TAG, "ssid: %s, password: %s", connectionInfo.ssid, connectionInfo.password);
 
 	saveConnectionInfo(&connectionInfo);
+	saveBackendUrlInfo(&backendurlInfo);
 
-  pResponse->setStatus(HttpResponse::HTTP_STATUS_OK, "OK");
-  pResponse->addHeader(HttpRequest::HTTP_HEADER_CONTENT_TYPE, "text/html");
+    pResponse->setStatus(HttpResponse::HTTP_STATUS_OK, "OK");
+    pResponse->addHeader(HttpRequest::HTTP_HEADER_CONTENT_TYPE, "text/html");
 	//pResponse->sendData(std::string((char*)selectAP_html, selectAP_html_len));
 	pResponse->close();
 	FreeRTOS::sleep(500);
@@ -279,11 +336,13 @@ void BootWiFi::bootWiFi2() {
 		// access point ourselves in order to allow a client to connect and bring
 		// up a browser.
 		connection_info_t connectionInfo;
-		int rc = getConnectionInfo(&connectionInfo);
+		backend_url_info_t backendurlInfo;
+		int rc = (getConnectionInfo(&connectionInfo) + getBackendUrlInfo(&backendurlInfo));
 		if (rc == 0) {
 			// We have received connection information, let us now become a station
 			// and attempt to connect to the access point.
 			ESP_LOGD(LOG_TAG, "- Connecting to access point \"%s\" ...", connectionInfo.ssid);
+			ESP_LOGD(LOG_TAG, "- Backend URL = %s", backendurlInfo.url);
 			assert(strlen(connectionInfo.ssid) > 0);
 
 		 	m_wifi.setIPInfo(

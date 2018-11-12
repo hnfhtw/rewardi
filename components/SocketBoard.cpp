@@ -22,6 +22,12 @@ void SocketBoard::setSocketID(uint32_t socketID){
 	m_socketID = socketID;
 }
 
+/**
+ * @brief xx
+ */
+void SocketBoard::setBackendURL(std::string backendURL){
+	m_backendURL = backendURL;		// use string copy function??
+}
 
 /**
  * @brief xx

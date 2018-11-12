@@ -17,7 +17,7 @@ public:
 	Box();
 	void            setBoxID(uint32_t boxID);
 	void			setOwner(User* pOwner);
-	bool			setBackendURL(std::string backendURL);		// return true if provided backendURL is reachable
+	void			setBackendURL(std::string backendURL);
 	void			setRewardiPerOpen(double rewardiPerOpen);
 	uint32_t		getBoxID();
 	User*			getOwner();
