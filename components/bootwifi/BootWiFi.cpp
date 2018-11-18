@@ -350,7 +350,7 @@ void BootWiFi::bootWiFi2() {
 		 		connectionInfo.ipInfo.gw.addr,
 				connectionInfo.ipInfo.netmask.addr
 			);
-		  
+		 	m_backendUrl = backendurlInfo.url;
       m_apConnectionStatus = m_wifi.connectAP(connectionInfo.ssid, connectionInfo.password);   // Try to connect to the access point.
       if(m_apConnectionStatus == ESP_OK){
     	  m_completeSemaphore.give();                                                              // end the boot process so we don't hang...
@@ -407,4 +407,8 @@ BootWiFi::BootWiFi() {
 	m_httpServerStarted = false;
   m_apConnectionStatus = UINT8_MAX;
 	setAccessPointCredentials("esp32", "password");   // Default access point credentials
+}
+
+std::string BootWiFi::getBackendUrl(){
+	return m_backendUrl;
 }

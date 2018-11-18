@@ -150,6 +150,7 @@ CommHandler.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/JSON.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/json/cJSON/cJSON.h
@@ -453,6 +454,8 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h:
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h:
 

@@ -25,13 +25,6 @@ void SocketBoard::setSocketID(uint32_t socketID){
 /**
  * @brief xx
  */
-void SocketBoard::setBackendURL(std::string backendURL){
-	m_backendURL = backendURL;		// use string copy function??
-}
-
-/**
- * @brief xx
- */
 void SocketBoard::setMaxTime(double maxTime){
 	m_maxTime = maxTime;
 }

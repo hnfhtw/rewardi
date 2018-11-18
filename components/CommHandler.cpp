@@ -16,6 +16,17 @@ static const char* LOG_TAG = "CommHandler";
  * @brief Create a CommHandler instance.
  */
 CommHandler::CommHandler(){
+    m_pSocket = NULL;
+    m_pSysControl = NULL;
+    m_pBox = NULL;
+}
+
+void CommHandler::setSysControl(SysControl* pSysControl){
+    m_pSysControl = pSysControl;
+}
+
+SysControl* CommHandler::getSysControl(){
+    return m_pSysControl;
 }
 
 void CommHandler::setBox(Box* pBox){
@@ -125,7 +136,7 @@ bool CommHandler::sendLogin(){
 	JsonObject obj = JSON::createObject();
 	obj.setInt("msgID", MSG_ID_LOGIN);
 	JsonObject objData = JSON::createObject();
-	objData.setString("trustNumber", m_pBox->getTrustNumber());
+	objData.setString("trustNumber", m_pSysControl->getTrustNumber());
 	obj.setObject("payload", objData);
 	sendEncodedData(obj.toString().c_str(), 1);
 	return true;

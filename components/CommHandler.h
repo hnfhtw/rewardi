@@ -10,10 +10,13 @@
 
 #include <Socket.h>
 #include "Box.h"
+#include "SysControl.h"
 
 class CommHandler {
 public:
 	CommHandler();
+	void setSysControl(SysControl* pSysControl);
+	SysControl* getSysControl();
 	void setBox(Box* pBox);
 	Box* getBox();
 	void setSocket(Socket* pSocket);
@@ -25,6 +28,7 @@ public:
 private:
     Socket* m_pSocket;
 	Box* m_pBox;
+	SysControl* m_pSysControl;
 	uint8_t m_pReceiveBuffer[512];
 };
 
