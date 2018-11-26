@@ -9,27 +9,38 @@
 #define COMPONENTS_COMMHANDLER_H_
 
 #include <Socket.h>
+//#include "SysControl.h"
 #include "Box.h"
-#include "SysControl.h"
+#include "SocketBoard.h"
+
+class CommHandlerReceiveTask;
 
 class CommHandler {
 public:
 	CommHandler();
-	void setSysControl(SysControl* pSysControl);
-	SysControl* getSysControl();
+	//void setSysControl(SysControl* pSysControl);
+	//SysControl* getSysControl();
 	void setBox(Box* pBox);
 	Box* getBox();
+    void setSocketBoard(SocketBoard* pSocketBoard);
+    SocketBoard* getSocketBoard();
 	void setSocket(Socket* pSocket);
 	Socket* getSocket();
 	bool parseMessage(const char* message);
 	bool sendLogin();
+	bool sendSocketBoardEvent();
     bool sendEncodedData(char const *str, uint8_t opcode);
     bool receiveData();
+    bool closeWebsocket();
+    void start();
 private:
+    friend class CommHandlerReceiveTask;
     Socket* m_pSocket;
 	Box* m_pBox;
-	SysControl* m_pSysControl;
+	SocketBoard* m_pSocketBoard;
+	//SysControl* m_pSysControl;
 	uint8_t m_pReceiveBuffer[512];
+	std::string m_sessionToken;
 };
 
 // WebSocket protocol constants

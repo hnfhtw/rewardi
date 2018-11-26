@@ -2,11 +2,12 @@
 #include <string>
 #include "sdkconfig.h"
 #include <BootWiFi.h>
+#include <freertos/timers.h>
 #include "CommHandler.h"
 #include "SysControl.h"
-#include <freertos/timers.h>
 #include "LockDriver.h"
 #include "StandbyControl.h"
+#include "RelaisDriver.h"
 
 static const char* LOG_TAG = "app_main";
 
@@ -16,15 +17,19 @@ extern "C" {
 
 BootWiFi bootWifi;
 Socket backendSocket;
+SocketBoard socketBoard;
 SysControl sysControl;
-Box box;
 CommHandler commHandler;
+Box box;
+
+RelaisDriver relaisDriver;
+
 TimerHandle_t hSysTick = NULL;      // 10ms SysTick (RTOS software timer) handle
 uint32_t sysTick;                   // 10ms SysTick variable
 LockDriver lockDriver;
 StandbyControl standbyControl(GPIO_NUM_0);
 
-static const std::string websocketHandshakeRequest = "GET /ws HTTP/1.1\r\n"     // HN-Original "GET /echo HTTP/1.1\r\n"
+static const std::string websocketHandshakeRequest = "GET /ws/sockets/5A43FE9E-F138-4856-BB09-33FC6925EA6D HTTP/1.1\r\n"     // HN-Original "GET /echo HTTP/1.1\r\n"
         "Host: 37.60.168.102:443\r\n"
         "Upgrade: websocket\r\n"
         "Connection: Upgrade\r\n"
@@ -58,19 +63,30 @@ void app_main(void)
         ESP_LOGD(LOG_TAG, " Websocket handshake = %s", websocketHandshakeRequest.c_str());  // HN-CHECK DEBUG
     backendSocket.send(websocketHandshakeRequest);  // send websocket handshake request -> this requests a protocol change from HTTP to Websocket
     vTaskDelay(500);
-    uint8_t data[512];
+    uint8_t data[1024];
     backendSocket.receive(data, 1024, false);       // receive websocket handshake response
-    data[512] = '\0';
+    data[1023] = '\0';
         ESP_LOGD(LOG_TAG, " Websocket answer = %s", data);  // HN-CHECK DEBUG
 
+    relaisDriver.setPin(GPIO_NUM_32);
+    relaisDriver.init();
+    socketBoard.setRelaisDriver(&relaisDriver);
+    socketBoard.init();
+    //sysControl.setCommHandler(&commHandler);
     commHandler.setBox(&box);
+    commHandler.setSocketBoard(&socketBoard);
     commHandler.setSocket(&backendSocket);
-    commHandler.setSysControl(&sysControl);
+    //commHandler.setSysControl(&sysControl);
 
-    commHandler.sendLogin();
-    vTaskDelay(500);
-    commHandler.receiveData();
 
+    //commHandler.sendLogin();
+    //vTaskDelay(500);
+    //commHandler.receiveData();
+    commHandler.start();
+
+    //vTaskDelay(60000);
+
+    //commHandler.closeWebsocket();
     // 10ms SysTick test - START
     /*uint32_t sysTickOld = 0;
     while(true){
@@ -83,14 +99,14 @@ void app_main(void)
     // 10ms SysTick test - END
 
     // test lock driver - START
-    lockDriver.setPin(GPIO_NUM_1);
-    lockDriver.init();
-    lockDriver.switchOn();
+    //lockDriver.setPin(GPIO_NUM_1);
+    //lockDriver.init();
+    //lockDriver.switchOn();
     // test lock driver - END
 
     // test standby - START
-    standbyControl.init();
-    standbyControl.enterSleepMode();
+    //standbyControl.init();
+    //standbyControl.enterSleepMode();
     // test standby - END
 }
 

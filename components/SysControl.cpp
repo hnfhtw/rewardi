@@ -25,6 +25,20 @@ void SysControl::setBackendURL(std::string backendURL){
 /**
  * @brief xx
  */
+void SysControl::setCommHandler(CommHandler* pCommHandler){
+    m_pCommHandler = pCommHandler;
+}
+
+/**
+ * @brief xx
+ */
+void SysControl::setSocketBoard(SocketBoard* pSocketBoard){
+    m_pSocketBoard = pSocketBoard;
+}
+
+/**
+ * @brief xx
+ */
 std::string SysControl::getBackendURL(){
 	return m_backendURL;
 }
@@ -34,4 +48,18 @@ std::string SysControl::getBackendURL(){
  */
 std::string SysControl::getTrustNumber(){
 	return m_trustNumber;
+}
+
+/**
+ * @brief xx
+ */
+CommHandler* SysControl::getCommHandler(){
+    return m_pCommHandler;
+}
+
+/**
+ * @brief xx
+ */
+SocketBoard* SysControl::getSocketBoard(){
+    return m_pSocketBoard;
 }

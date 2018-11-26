@@ -10,6 +10,12 @@
 /**
  * @brief xxx
  */
+RelaisDriver::RelaisDriver(){
+}
+
+/**
+ * @brief xxx
+ */
 RelaisDriver::RelaisDriver(gpio_num_t relaisPin){
     m_relaisPin = relaisPin;
 }

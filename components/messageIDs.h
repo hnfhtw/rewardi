@@ -8,6 +8,8 @@
 #ifndef COMPONENTS_MESSAGEIDS_H_
 #define COMPONENTS_MESSAGEIDS_H_
 
+#define MSG_ID_INIT                        10
+
 // ID 100 to 199 for general messages that are used everywhere (socket, box, backend)
 #define MSG_ID_LOGIN                      100
 #define MSG_ID_LOGIN_RESP                 101

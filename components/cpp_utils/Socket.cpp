@@ -365,9 +365,10 @@ size_t Socket::receive(uint8_t* data, size_t length, bool exact) {
 	//ESP_LOGD(LOG_TAG, ">> receive: sockFd: %d, length: %d, exact: %d", m_sock, length, exact);
 	if (!exact) {
 		int rc;
+		int bytesAvailable = 0;
 		if (getSSL()) {
 			do {
-				int bytesAvailable = mbedtls_ssl_get_bytes_avail(&m_sslContext);
+				bytesAvailable = mbedtls_ssl_get_bytes_avail(&m_sslContext);
 				ESP_LOGD(LOG_TAG, " bytes available = %d", bytesAvailable);
 				if(!exact){
 					rc = mbedtls_ssl_read(&m_sslContext, data, length);
@@ -378,7 +379,8 @@ size_t Socket::receive(uint8_t* data, size_t length, bool exact) {
 
 				ESP_LOGD(LOG_TAG, "rc=%d, MBEDTLS_ERR_SSL_WANT_READ=%d", rc, MBEDTLS_ERR_SSL_WANT_READ);
 			} while (rc == MBEDTLS_ERR_SSL_WANT_WRITE || rc == MBEDTLS_ERR_SSL_WANT_READ);
-		} else {
+		}
+		else {
 			rc = ::lwip_recv_r(m_sock, data, length, 0);
 			if (rc == -1) {
 				ESP_LOGE(LOG_TAG, "receive: %s", strerror(errno));

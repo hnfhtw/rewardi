@@ -12,6 +12,7 @@
 
 class RelaisDriver {
 public:
+    RelaisDriver();
     RelaisDriver(gpio_num_t relaisPin);
     void setPin(gpio_num_t relaisPin);
     gpio_num_t getPin();
