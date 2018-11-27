@@ -30,7 +30,7 @@ public:
 	RelaisDriver*   getRelaisDriver();
 	//SysControl*     getSysControl();
 	void            switchOn();
-	void            switchOff(bool isTimeout);
+	uint32_t        switchOff(bool isTimeout);
 	static void timeout(TimerHandle_t xTimer);
 private:
 	uint32_t		m_socketID;

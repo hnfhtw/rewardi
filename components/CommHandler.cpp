@@ -69,18 +69,10 @@ bool CommHandler::parseMessage(const char* message){
 	        JsonArray data = obj.getArray("data");
 	        uint32_t numberOfDataElements = data.size();
 	        ESP_LOGD(LOG_TAG, "Number of array elements = %d", numberOfDataElements);
-	        m_sessionToken = data.getObject(0).getString("value").c_str();
+	        m_sessionToken = data.getObject(0).getString("token").c_str();
 	        ESP_LOGD(LOG_TAG, "MSG_ID_INIT received, %d data elements, trust number = %s", numberOfDataElements, m_sessionToken.c_str());
 	        break;
 	    }
-		case MSG_ID_LOGIN: {
-			ESP_LOGD(LOG_TAG, "MSG_ID_LOGIN (echo) received");
-			break;
-		}
-		case MSG_ID_LOGIN_RESP: {
-			ESP_LOGD(LOG_TAG, "MSG_ID_LOGIN_RESP received");
-			break;
-		}
 		case MSG_ID_ACK: {
 
 			break;
@@ -89,31 +81,11 @@ bool CommHandler::parseMessage(const char* message){
 
 			break;
 		}
-		case MSG_ID_GETUSERDATA_RESP: {
-
-			break;
-		}
-		case MSG_ID_SETSOCKETID: {
-
-			break;
-		}
-		case MSG_ID_SETBACKENDURL: {
-
-			break;
-		}
-		case MSG_ID_GETSOCKETID_RESP: {
-
-			break;
-		}
-		case MSG_ID_GETSOCKETDATA_RESP: {
-
-			break;
-		}
 		case MSG_ID_ACTIVATESOCKET: {
 		    JsonArray data = obj.getArray("data");
 		    uint32_t numberOfDataElements = data.size();
 		    JsonObject maxTimeObject = data.getObject(0);
-		    m_pSocketBoard->setMaxTime(maxTimeObject.getInt("value"));
+		    m_pSocketBoard->setMaxTime(maxTimeObject.getInt("maxTime"));
 		    ESP_LOGD(LOG_TAG, "MSG_ID_ACTIVATESOCKET received, %d data elements, maxTime = %d", numberOfDataElements, m_pSocketBoard->getMaxTime());
 		    // HN-CHECK: Todo: switch on socket for maxTime
 		    m_pSocketBoard->switchOn();
@@ -123,19 +95,22 @@ bool CommHandler::parseMessage(const char* message){
             ESP_LOGD(LOG_TAG, "MSG_ID_DEACTIVATESOCKET received");
             // HN-CHECK: Todo: switch off socket, reset maxTime timer
             // and send MSG_ID_DEACTIVATESOCKET_RESP
-            m_pSocketBoard->switchOff(false);
-            sendSocketBoardEvent();
+            uint32_t duration_sec = m_pSocketBoard->switchOff(false);
+
+            CommHandlerSendData_t sendData;
+            sendData.msgID = MSG_ID_SETSOCKETEVENT;
+            sendData.value1 = duration_sec;
+            sendData.value2 = 0;
+            sendData.flag1 = false;
+            addSendMessage(sendData);
+            //sendSocketBoardEvent();
 			break;
 		}
-		case MSG_ID_GETBOXID_RESP: {
+		case MSG_ID_REQUESTOPEN_RESP: {
 
 			break;
 		}
 		case MSG_ID_GETBOXDATA_RESP: {
-
-			break;
-		}
-		case MSG_ID_SETOWNER: {
 
 			break;
 		}
@@ -159,51 +134,102 @@ bool CommHandler::parseMessage(const char* message){
 	return true;
 }
 
-/**
- * @brief xx
- */
-/*bool CommHandler::sendLogin(){
-	JsonObject obj = JSON::createObject();
-	obj.setInt("type", MSG_ID_LOGIN);          // type = msgID
-	JsonObject objData = JSON::createObject();
-	objData.setString("trustNumber", m_pSysControl->getTrustNumber());
-	obj.setObject("payload", objData);
-	sendEncodedData(obj.toString().c_str(), 1);
-	return true;
-}*/
 
 /**
  * @brief xx
  */
-bool CommHandler::sendSocketBoardEvent(){
+bool CommHandler::sendData(CommHandlerSendData_t sendData){
+
     JsonObject obj = JSON::createObject();
     obj.setString("token", m_sessionToken);
-    obj.setInt("uid", 0);
-    obj.setInt("type", MSG_ID_DEACTIVATESOCKET);          // type = msgID
-    JsonArray data = JSON::createArray();
-        JsonObject onTime = JSON::createObject();
-        onTime.setString("param", "onTime");
-        onTime.setString("value", "2018-11-24T23:00:00");
-        JsonObject deltaTime = JSON::createObject();
-        deltaTime.setString("param", "deltaTime");
-        deltaTime.setInt("value", 3600);
-        JsonObject isTimeout = JSON::createObject();
-        isTimeout.setString("param", "isTimeout");
-        isTimeout.setBoolean("value", false);
-    data.addObject(onTime);
-    data.addObject(deltaTime);
-    data.addObject(isTimeout);
-    obj.setArray("data", data);
-    ESP_LOGD(LOG_TAG, "Send socketBoardEvent: %s", obj.toStringUnformatted().c_str());
+    obj.setInt("uid", esp_random());
+
+    switch(sendData.msgID){
+        case MSG_ID_ACK: {
+            obj.setInt("type", MSG_ID_ACK);
+            JsonArray data = JSON::createArray();
+            JsonObject refuid = JSON::createObject();
+            refuid.setInt("refuid", sendData.value1);
+            data.addObject(refuid);
+            obj.setArray("data", data);
+            ESP_LOGD(LOG_TAG, "Send MSG_ID_ACK: %s", obj.toStringUnformatted().c_str());
+            break;
+        }
+        case MSG_ID_NACK: {
+            obj.setInt("type", MSG_ID_NACK);
+            JsonArray data = JSON::createArray();
+            JsonObject errornumber = JSON::createObject();
+            errornumber.setInt("errno", sendData.value2);
+            JsonObject message = JSON::createObject();
+            message.setString("message", "ESP32 NACK");
+            JsonObject refuid = JSON::createObject();
+            refuid.setInt("refuid", sendData.value1);
+            data.addObject(errornumber);
+            data.addObject(message);
+            data.addObject(refuid);
+            obj.setArray("data", data);
+            ESP_LOGD(LOG_TAG, "Send MSG_ID_NACK: %s", obj.toStringUnformatted().c_str());
+            break;
+        }
+        case MSG_ID_REQUESTOPEN: {
+            obj.setInt("type", MSG_ID_REQUESTOPEN);
+            ESP_LOGD(LOG_TAG, "Send MSG_ID_REQUESTOPEN: %s", obj.toStringUnformatted().c_str());
+
+            break;
+        }
+        case MSG_ID_GETBOXDATA: {
+            obj.setInt("type", MSG_ID_GETBOXDATA);
+            ESP_LOGD(LOG_TAG, "Send MSG_ID_GETBOXDATA: %s", obj.toStringUnformatted().c_str());
+            break;
+        }
+        case MSG_ID_SETBOXEVENT: {
+            obj.setInt("type", MSG_ID_SETBOXEVENT);
+            ESP_LOGD(LOG_TAG, "Send MSG_ID_SETBOXEVENT: %s", obj.toStringUnformatted().c_str());
+            break;
+        }
+        case MSG_ID_SETSOCKETEVENT: {
+            obj.setInt("type", MSG_ID_SETSOCKETEVENT);
+            JsonArray data = JSON::createArray();
+            JsonObject duration = JSON::createObject();
+            duration.setInt("duration", sendData.value1);
+            JsonObject deltaTime = JSON::createObject();
+            deltaTime.setInt("deltaTime", sendData.value2);
+            JsonObject isTimeout = JSON::createObject();
+            isTimeout.setBoolean("isTimeout", sendData.flag1);
+            data.addObject(duration);
+            data.addObject(deltaTime);
+            data.addObject(isTimeout);
+            obj.setArray("data", data);
+            ESP_LOGD(LOG_TAG, "Send MSG_ID_SETSOCKETEVENT: %s", obj.toStringUnformatted().c_str());
+            break;
+        }
+        default: {
+            return false;
+        }
+    }
+
     std::string str = obj.toStringUnformatted();
-    sendEncodedData(str.c_str(), 1);
+    sendEncodedRawData(str.c_str(), 1);
+
     return true;
 }
 
+
 /**
  * @brief xx
  */
-bool CommHandler::sendEncodedData(char const *str, uint8_t opcode) {
+bool CommHandler::addSendMessage(CommHandlerSendData_t sendData){
+    if(xQueueSend(m_sendDataQueue,(void *)&sendData,(TickType_t )0)){       // HN-CHECK todo: check if sendData is valid!?
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief xx
+ */
+bool CommHandler::sendEncodedRawData(char const *str, uint8_t opcode) {
 	if(m_pSocket == NULL){
 		return false;
 	}
@@ -309,7 +335,7 @@ bool CommHandler::receiveData(){
  * @brief xx
  */
 bool CommHandler::closeWebsocket(){
-    sendEncodedData("", 8);
+    sendEncodedRawData("", 8);
     return true;
 }
 
@@ -340,8 +366,50 @@ private:
 }; // CommHandlerReceiveTask
 
 
+/**
+ * @brief CommHandlerSendTask
+ */
+class CommHandlerSendTask: public Task {
+public:
+    CommHandlerSendTask(std::string name): Task(name, 16 * 1024) {
+        m_pCommHandler = nullptr;
+    };
+
+private:
+    CommHandler* m_pCommHandler; // Reference to the CommHandler
+
+    /**
+     * @brief xxx
+     */
+    void run(void* data) {
+        m_pCommHandler = (CommHandler*) data;   // The passed in data is an instance of an CommHandler.
+        CommHandlerSendData_t sendData;
+        sendData.msgID = 999;
+        sendData.value1 = 0;
+        sendData.value2 = 0;
+        sendData.value3 = 0;
+        sendData.flag1 = false;
+        sendData.flag2 = false;
+
+        while (true) {   // Loop forever.
+            ESP_LOGD("CommHandlerSendTask", "Waiting for data to send");
+            if(xQueueReceive(m_pCommHandler->m_sendDataQueue,&sendData,pdMS_TO_TICKS(1000))){
+                m_pCommHandler->sendData(sendData);  // send out data if there is something added to the queue
+            }
+        } // while
+    } // run
+}; // CommHandlerSendTask
+
 
 void CommHandler::start(){
+    m_sendDataQueue = xQueueCreate(10,sizeof(CommHandlerSendData_t));
+    if(!m_sendDataQueue){
+        ESP_LOGD(LOG_TAG, "Failed to create sendDataQueue!");
+    }
+
+    CommHandlerSendTask* pCommHandlerSendTask = new CommHandlerSendTask("CommHandlerSendTask");
+    pCommHandlerSendTask->start(this);
+
     CommHandlerReceiveTask* pCommHandlerReceiveTask = new CommHandlerReceiveTask("CommHandlerReceiveTask");
     pCommHandlerReceiveTask->start(this);
 }

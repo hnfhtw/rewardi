@@ -9,6 +9,7 @@
 #include <map>
 #include <esp_log.h>
 #include "CommHandler.h"
+#include "messageIDs.h"
 
 static const char* LOG_TAG = "SocketBoard";
 static std::map<void*, SocketBoard*> socketBoardMap;
@@ -104,25 +105,34 @@ void SocketBoard::switchOn(){
         ESP_LOGD(LOG_TAG, "switchOn, maxTime = %d sec", m_maxTime);
         xTimerChangePeriod(m_hTimeout, pdMS_TO_TICKS(m_maxTime*1000), 0);
         xTimerStart(m_hTimeout, 0);   // start maxTime timeout timer
-
     }
 }
 
 /**
  * @brief xx
  */
-void SocketBoard::switchOff(bool isTimeout){
+uint32_t SocketBoard::switchOff(bool isTimeout){
     if(m_pRelaisDriver != nullptr){
         m_pRelaisDriver->switchOff();
         ESP_LOGD(LOG_TAG, "switchOff, isTimeout = %d", isTimeout);
     }
 
+    uint32_t duration_sec = 0;
     if(!isTimeout){
+        duration_sec = (m_maxTime*1000 - pdTICKS_TO_MS(xTimerGetExpiryTime(m_hTimeout)))/1000;
         xTimerStop(m_hTimeout, 0);
     }
     else{
+        duration_sec = m_maxTime;
+        CommHandlerSendData_t sendData;
+        sendData.msgID = MSG_ID_SETSOCKETEVENT;
+        sendData.value1 = duration_sec;
+        sendData.value2 = 0;
+        sendData.flag1 = false;
+        commHandler.addSendMessage(sendData);
         //commHandler.sendSocketBoardEvent();           // die callback vom timer darf nicht zu lange blockieren sonst greift ein watchdog
     }
+    return duration_sec;
 }
 
 /**

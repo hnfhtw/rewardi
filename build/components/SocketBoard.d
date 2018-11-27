@@ -136,7 +136,8 @@ SocketBoard.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/lwip/err.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SocketBoard.h:
 
@@ -411,4 +412,6 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h:
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h:
 /home/Harald.Netzer/esp/rewardi/components/./SocketBoard.cpp:

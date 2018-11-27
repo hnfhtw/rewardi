@@ -12,8 +12,19 @@
 //#include "SysControl.h"
 #include "Box.h"
 #include "SocketBoard.h"
+#include "freertos/queue.h"
 
 class CommHandlerReceiveTask;
+class CommHandlerSendTask;
+
+typedef struct _sendData_ {
+    uint32_t  msgID;
+    uint32_t value1;
+    uint32_t value2;
+    uint32_t value3;
+    bool      flag1;
+    bool      flag2;
+} CommHandlerSendData_t;
 
 class CommHandler {
 public:
@@ -26,21 +37,24 @@ public:
     SocketBoard* getSocketBoard();
 	void setSocket(Socket* pSocket);
 	Socket* getSocket();
-	bool parseMessage(const char* message);
-	bool sendLogin();
-	bool sendSocketBoardEvent();
-    bool sendEncodedData(char const *str, uint8_t opcode);
-    bool receiveData();
+    bool addSendMessage(CommHandlerSendData_t data);
     bool closeWebsocket();
     void start();
+
 private:
     friend class CommHandlerReceiveTask;
+    friend class CommHandlerSendTask;
     Socket* m_pSocket;
 	Box* m_pBox;
 	SocketBoard* m_pSocketBoard;
 	//SysControl* m_pSysControl;
 	uint8_t m_pReceiveBuffer[512];
 	std::string m_sessionToken;
+	QueueHandle_t m_sendDataQueue;
+	bool sendData(CommHandlerSendData_t data);
+    bool sendEncodedRawData(char const *str, uint8_t opcode);
+    bool receiveData();
+    bool parseMessage(const char* message);
 };
 
 // WebSocket protocol constants
@@ -55,7 +69,5 @@ private:
 #define WS_MASK           0x80
 #define WS_SIZE16         126
 #define WS_SIZE64         127
-#define RAND_MAX 256
-
 
 #endif /* COMPONENTS_COMMHANDLER_H_ */
