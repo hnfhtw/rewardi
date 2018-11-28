@@ -174,7 +174,9 @@ main.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/nvs_flash/include/nvs_flash.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/nvs_flash/include/nvs.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
 
@@ -525,4 +527,8 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h:
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/nvs_flash/include/nvs_flash.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/nvs_flash/include/nvs.h:
 /home/Harald.Netzer/esp/rewardi/main/./main.cpp:

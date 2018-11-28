@@ -209,7 +209,7 @@ bool CommHandler::sendData(CommHandlerSendData_t sendData){
     }
 
     std::string str = obj.toStringUnformatted();
-    sendEncodedRawData(str.c_str(), 1);
+    sendEncodedRawData(str.c_str(), WS_OPCODE_TEXT);
 
     return true;
 }
@@ -335,7 +335,7 @@ bool CommHandler::receiveData(){
  * @brief xx
  */
 bool CommHandler::closeWebsocket(){
-    sendEncodedRawData("", 8);
+    sendEncodedRawData("", WS_OPCODE_CLOSE);
     return true;
 }
 

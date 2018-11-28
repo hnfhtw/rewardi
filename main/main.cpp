@@ -8,8 +8,19 @@
 #include "LockDriver.h"
 #include "StandbyControl.h"
 #include "RelaisDriver.h"
+#include "nvs_flash.h"
+
+//const char* DEVICE_DATA_PARTITION = "device_data\0";
+#define DEVICE_DATA_PARTITION       "device_data"
+#define DEVICE_DATA_NAMESPACE       "device_data"
+#define DEVICE_DATA_KEY_TRUSTNUMBER "trust_number"
+#define DEVICE_DATA_SIZE_TRUSTNUMBER    37      // 36 characters + termination '\0'
+// // device_data.bin file generieren mit trust_number aus generate_device_data.csv geht nur mit Python 2.x!!
+// 1) install esptool:  pip install esptool
+// 2) flash device data from terminal with: esptool.py --port COM5 write_flash 0x210000 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/device_data.bin
 
 static const char* LOG_TAG = "app_main";
+char trustNumber[DEVICE_DATA_SIZE_TRUSTNUMBER+1];
 
 extern "C" {
 	void app_main(void);
@@ -37,13 +48,19 @@ static const std::string websocketHandshakeRequest = "GET /ws/sockets/5A43FE9E-F
         "Sec-WebSocket-Version: 13\r\n"
         "\r\n";
 
+static bool read_device_data(char* trustNumber);
+
 void sysTick_notify(void){
     ++sysTick;
 }
 
 void app_main(void)
 {
-    hSysTick = xTimerCreate("SysTick",  pdMS_TO_TICKS(10), pdTRUE, NULL, (TimerCallbackFunction_t) &sysTick_notify);    // create and initialize 10ms SysTick
+    trustNumber[DEVICE_DATA_SIZE_TRUSTNUMBER] = '\0';
+    read_device_data(trustNumber);
+    ESP_LOGD(LOG_TAG, " Trust number from flash = %s", trustNumber);
+
+    /*hSysTick = xTimerCreate("SysTick",  pdMS_TO_TICKS(10), pdTRUE, NULL, (TimerCallbackFunction_t) &sysTick_notify);    // create and initialize 10ms SysTick
     xTimerStart(hSysTick, 0);   // start 10ms SysTick
 
     // Boot WiFi - ESP32 acts as an AP if no SSID and PW is set
@@ -85,7 +102,7 @@ void app_main(void)
     commHandler.start();
 
     //vTaskDelay(60000);
-
+*/
     //commHandler.closeWebsocket();
     // 10ms SysTick test - START
     /*uint32_t sysTickOld = 0;
@@ -110,4 +127,32 @@ void app_main(void)
     // test standby - END
 }
 
+static bool read_device_data(char* trustNumber)
+{
+    bool rtnVal = false;
+
+    esp_err_t err = nvs_flash_init_partition(DEVICE_DATA_PARTITION);
+    if (err != ESP_OK){
+        ESP_LOGD(LOG_TAG, " nvs_flash_init_partition() error = %d", err);
+        return rtnVal;
+    }
+
+    nvs_handle hNVS;
+    err = nvs_open_from_partition(DEVICE_DATA_PARTITION, DEVICE_DATA_NAMESPACE, NVS_READWRITE, &hNVS);
+    if (err != ESP_OK){
+        ESP_LOGD(LOG_TAG, " nvs_open_from_partition() error = %d", err);
+        return rtnVal;
+    }
+
+    size_t length = DEVICE_DATA_SIZE_TRUSTNUMBER;
+    err = nvs_get_str(hNVS, DEVICE_DATA_KEY_TRUSTNUMBER, trustNumber, &length);
+    if (err != ESP_OK){
+        ESP_LOGD(LOG_TAG, " nvs_get_str() error = %d", err);
+        return rtnVal;
+    }
+
+    nvs_close(hNVS);
+
+    return rtnVal;
+}
 

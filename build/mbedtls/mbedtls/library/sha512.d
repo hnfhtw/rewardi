@@ -105,4 +105,3 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/includ
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/machine/stdlib.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/alloca.h:
-/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/library/sha512.c:
