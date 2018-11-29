@@ -168,10 +168,15 @@ main.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RgbLedControl.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCodeParser.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/ButtonDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SocketBoard.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h \
@@ -514,13 +519,23 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h:
 
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RgbLedControl.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCodeParser.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/ButtonDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h:
+
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SocketBoard.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h:
 

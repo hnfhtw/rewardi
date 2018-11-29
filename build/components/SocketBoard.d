@@ -5,33 +5,10 @@ SocketBoard.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/machine/_default_types.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/features.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/_intsup.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/driver/include/driver/gpio.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_err.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/stdio.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/stdio.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/platform_include/assert.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/include/sdkconfig.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/stdlib.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/machine/stdlib.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/alloca.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/assert.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_types.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_assert.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/rtc_io_reg.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/rom/gpio.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_attr.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_pins.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_intr_alloc.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/include/soc/gpio_periph.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/include/sdkconfig.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/xtensa/hal.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/xtensa/config/core.h \
@@ -42,8 +19,14 @@ SocketBoard.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/xtensa_context.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/xtensa/corebits.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/xtensa/xtruntime-frames.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/stdlib.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/machine/stdlib.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/alloca.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_assert.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/platform_include/assert.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/assert.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/projdefs.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/portable.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/deprecated_definitions.h \
@@ -53,13 +36,29 @@ SocketBoard.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/xtensa/xtruntime-core-state.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_crosscore_int.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_timer.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/stdio.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/stdio.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_err.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/heap/include/esp_heap_caps.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/heap/include/multi_heap.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/include/soc/soc_memory_layout.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_attr.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/portbenchmark.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/mpu_wrappers.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_system.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_sleep.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/driver/include/driver/gpio.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_types.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/soc.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/rtc_io_reg.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/rom/gpio.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_pins.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_intr_alloc.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/include/soc/gpio_periph.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/driver/include/driver/touch_pad.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_intr.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/rom/ets_sys.h \
@@ -74,8 +73,7 @@ SocketBoard.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/queue.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/timers.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/task.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log_internal.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/Socket.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/mbedtls/mbedtls/include/mbedtls/platform.h \
@@ -137,6 +135,13 @@ SocketBoard.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RgbLedControl.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCodeParser.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/ButtonDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log_internal.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SocketBoard.h:
@@ -149,59 +154,13 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/includ
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/_intsup.h:
 
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/driver/include/driver/gpio.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_err.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/stdio.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/stdio.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/platform_include/assert.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/include/sdkconfig.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/stdlib.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/machine/stdlib.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/alloca.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/assert.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_types.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_assert.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/rtc_io_reg.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/rom/gpio.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_attr.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_pins.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_intr_alloc.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/include/soc/gpio_periph.h:
-
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/build/include/sdkconfig.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h:
 
@@ -223,9 +182,21 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/xtensa/xtruntime-frames.h:
 
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/stdlib.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/machine/stdlib.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/alloca.h:
+
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/rom/ets_sys.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_assert.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/platform_include/assert.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/assert.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/projdefs.h:
 
@@ -245,11 +216,19 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_timer.h:
 
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/stdio.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/stdio.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_err.h:
+
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/heap/include/esp_heap_caps.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/heap/include/multi_heap.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/include/soc/soc_memory_layout.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_attr.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/portbenchmark.h:
 
@@ -258,6 +237,30 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/incl
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_system.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_sleep.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/driver/include/driver/gpio.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_types.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_reg.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_struct.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/rtc_io_reg.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/io_mux_reg.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_sig_map.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/rom/gpio.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/gpio_pins.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/esp32/include/esp_intr_alloc.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/include/soc/gpio_periph.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/driver/include/driver/touch_pad.h:
 
@@ -287,9 +290,7 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/incl
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/task.h:
 
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log_internal.h:
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/CommHandler.h:
 
@@ -412,6 +413,20 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h:
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCode.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RgbLedControl.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCodeParser.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/ButtonDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log_internal.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h:
 /home/Harald.Netzer/esp/rewardi/components/./SocketBoard.cpp:

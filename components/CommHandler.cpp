@@ -17,11 +17,12 @@ static const char* LOG_TAG = "CommHandler";
  * @brief Create a CommHandler instance.
  */
 CommHandler::CommHandler(){
-    m_pSocket = NULL;
-    //m_pSysControl = NULL;
-    m_pBox = NULL;
-    m_pSocketBoard = NULL;
+    m_pSocket = nullptr;
+    //m_pSysControl = nullptr;
+    m_pBox = nullptr;
+    m_pSocketBoard = nullptr;
     m_sessionToken = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    m_sendDataQueue = nullptr;
 }
 
 /*void CommHandler::setSysControl(SysControl* pSysControl){
@@ -82,48 +83,62 @@ bool CommHandler::parseMessage(const char* message){
 			break;
 		}
 		case MSG_ID_ACTIVATESOCKET: {
-		    JsonArray data = obj.getArray("data");
-		    uint32_t numberOfDataElements = data.size();
-		    JsonObject maxTimeObject = data.getObject(0);
-		    m_pSocketBoard->setMaxTime(maxTimeObject.getInt("maxTime"));
-		    ESP_LOGD(LOG_TAG, "MSG_ID_ACTIVATESOCKET received, %d data elements, maxTime = %d", numberOfDataElements, m_pSocketBoard->getMaxTime());
-		    // HN-CHECK: Todo: switch on socket for maxTime
-		    m_pSocketBoard->switchOn();
+		    if(m_pSocketBoard != nullptr && m_pBox == nullptr){
+                JsonArray data = obj.getArray("data");
+                uint32_t numberOfDataElements = data.size();
+                JsonObject maxTimeObject = data.getObject(0);
+                m_pSocketBoard->setMaxTime(maxTimeObject.getInt("maxTime"));
+                ESP_LOGD(LOG_TAG, "MSG_ID_ACTIVATESOCKET received, %d data elements, maxTime = %d", numberOfDataElements, m_pSocketBoard->getMaxTime());
+                // HN-CHECK: Todo: switch on socket for maxTime
+                m_pSocketBoard->switchOn();
+		    }
 			break;
 		}
 		case MSG_ID_DEACTIVATESOCKET: {
-            ESP_LOGD(LOG_TAG, "MSG_ID_DEACTIVATESOCKET received");
-            // HN-CHECK: Todo: switch off socket, reset maxTime timer
-            // and send MSG_ID_DEACTIVATESOCKET_RESP
-            uint32_t duration_sec = m_pSocketBoard->switchOff(false);
+            if(m_pSocketBoard != nullptr && m_pBox == nullptr){
+                ESP_LOGD(LOG_TAG, "MSG_ID_DEACTIVATESOCKET received");
+                // HN-CHECK: Todo: switch off socket, reset maxTime timer
+                // and send MSG_ID_DEACTIVATESOCKET_RESP
+                uint32_t duration_sec = m_pSocketBoard->switchOff(false);
 
-            CommHandlerSendData_t sendData;
-            sendData.msgID = MSG_ID_SETSOCKETEVENT;
-            sendData.value1 = duration_sec;
-            sendData.value2 = 0;
-            sendData.flag1 = false;
-            addSendMessage(sendData);
-            //sendSocketBoardEvent();
+                CommHandlerSendData_t sendData;
+                sendData.msgID = MSG_ID_SETSOCKETEVENT;
+                sendData.value1 = duration_sec;
+                sendData.value2 = 0;
+                sendData.flag1 = false;
+                addSendMessage(sendData);
+                //sendSocketBoardEvent();
+            }
 			break;
 		}
 		case MSG_ID_REQUESTOPEN_RESP: {
+            if(m_pBox != nullptr && m_pSocketBoard == nullptr){
 
+            }
 			break;
 		}
 		case MSG_ID_GETBOXDATA_RESP: {
+            if(m_pBox != nullptr && m_pSocketBoard == nullptr){
 
+            }
 			break;
 		}
 		case MSG_ID_STARTBOXCODEPARSING: {
+            if(m_pBox != nullptr && m_pSocketBoard == nullptr){
 
+            }
 			break;
 		}
 		case MSG_ID_STOPBOXCODEPARSING: {
+            if(m_pBox != nullptr && m_pSocketBoard == nullptr){
 
+            }
 			break;
 		}
 		case MSG_ID_LOCKBOX: {
+            if(m_pBox != nullptr && m_pSocketBoard == nullptr){
 
+            }
 			break;
 		}
 		default: {
@@ -288,26 +303,9 @@ bool CommHandler::receiveData(){
 	    bytesRead = m_pSocket->receive(m_pReceiveBuffer, 512, false);
 	}
 
-    ESP_LOGD(LOG_TAG, "received byte 0 = %d", m_pReceiveBuffer[0]);
-    ESP_LOGD(LOG_TAG, "received byte 1 = %d", m_pReceiveBuffer[1]);
-    ESP_LOGD(LOG_TAG, "received byte 2 = %d", m_pReceiveBuffer[2]);
-    ESP_LOGD(LOG_TAG, "received byte 3 = %d", m_pReceiveBuffer[3]);
-    ESP_LOGD(LOG_TAG, "received byte 4 = %d", m_pReceiveBuffer[4]);
-    ESP_LOGD(LOG_TAG, "received byte 5 = %d", m_pReceiveBuffer[5]);
-    ESP_LOGD(LOG_TAG, "received byte 6 = %d", m_pReceiveBuffer[6]);
-    ESP_LOGD(LOG_TAG, "received byte 7 = %d", m_pReceiveBuffer[7]);
-    ESP_LOGD(LOG_TAG, "received byte 8 = %d", m_pReceiveBuffer[8]);
-
-	for(uint32_t i = 0; i<512; ++i){
-	    if(m_pReceiveBuffer[i] == 0){
-	        m_pReceiveBuffer[i] = 'x';
-	    }
-	}
-	m_pReceiveBuffer[511] = '\0'; // DEBUG
+	// print full receive buffer - DEBUG
+	m_pReceiveBuffer[511] = '\0';
 	ESP_LOGD(LOG_TAG, "received string = %s", m_pReceiveBuffer);
-	//ESP_LOGD(LOG_TAG, "received string = %s", &m_pReceiveBuffer[2]);
-	//ESP_LOGD(LOG_TAG, "received string = %s", &m_pReceiveBuffer[8]);
-	//ESP_LOGD(LOG_TAG, "received string = %s", &m_pReceiveBuffer[40]);
 
 	m_pReceiveBuffer[bytesRead] = '\0';	// mark end of valid data
 

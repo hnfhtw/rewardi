@@ -11,20 +11,32 @@
 #include <stdint.h>
 #include <string>
 #include "User.h"
+#include "LockDriver.h"
+#include "RgbLedControl.h"
+#include "BoxCodeParser.h"
+#include "CommHandler.h"
+
+class CommHandler;  // forward declaration to avoid error caused by recursive inclusion (Box.h includes CommHandler.h and vice versa)
 
 class Box {
 public:
-	Box();
-	void            setBoxID(uint32_t boxID);
+	Box(gpio_num_t lockPin, gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_num_t ledBluePin, gpio_num_t buttonPin);
+	void            init();
 	void			setOwner(User* pOwner);
-	void			setRewardiPerOpen(double rewardiPerOpen);
-	uint32_t		getBoxID();
+	void            setCommHandler(CommHandler* pCommHandler);
+	//void            setLockDriver(LockDriver* pLockDriver);
+	//void            setRgbLedControl(RgbLedControl* pRgbLedControl);
+	//void            setBoxCodeParser(BoxCodeParser* pBoxCodeParser);
 	User*			getOwner();
-	double			getRewardiPerOpen();
+	LockDriver*     getLockDriver();
+	RgbLedControl*  getRgbLedControl();
+	BoxCodeParser*  getBoxCodeParser();
 private:
-	uint32_t		m_boxID;
 	User*	    	m_pOwner;
-	double			m_rewardiPerOpen;
+	LockDriver*     m_pLockDriver;
+	RgbLedControl*  m_pRgbLedControl;
+	BoxCodeParser*  m_pBoxCodeParser;
+	CommHandler*    m_pCommHandler;
 };
 
 #endif /* COMPONENTS_BOX_H_ */

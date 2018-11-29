@@ -13,7 +13,9 @@
 class RgbLedControl {
 public:
     enum Color{BLACK, WHITE, RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA};
-    RgbLedControl(LedDriver* pLedRed, LedDriver* pLedGreen, LedDriver* pLedBlue);
+    //RgbLedControl(LedDriver* pLedRed, LedDriver* pLedGreen, LedDriver* pLedBlue);
+    RgbLedControl(gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_num_t ledBluePin);
+    void init();
     void setColor(RgbLedControl::Color color);
 
 private:

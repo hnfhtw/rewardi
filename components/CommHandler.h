@@ -9,7 +9,6 @@
 #define COMPONENTS_COMMHANDLER_H_
 
 #include <Socket.h>
-//#include "SysControl.h"
 #include "Box.h"
 #include "SocketBoard.h"
 #include "freertos/queue.h"
@@ -25,6 +24,9 @@ typedef struct _sendData_ {
     bool      flag1;
     bool      flag2;
 } CommHandlerSendData_t;
+
+class SocketBoard;  // forward declaration to avoid error caused by recursive inclusion (SocketBoard.h includes CommHandler.h and vice versa)
+class Box;          // forward declaration to avoid error caused by recursive inclusion (Box.h includes CommHandler.h and vice versa)
 
 class CommHandler {
 public:

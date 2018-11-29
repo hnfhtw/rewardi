@@ -10,10 +10,28 @@
 /**
  * @brief xxx
  */
-RgbLedControl::RgbLedControl(LedDriver* pLedRed, LedDriver* pLedGreen, LedDriver* pLedBlue){
+/*RgbLedControl::RgbLedControl(LedDriver* pLedRed, LedDriver* pLedGreen, LedDriver* pLedBlue){
     m_pLedRed = pLedRed;
     m_pLedGreen = pLedGreen;
     m_pLedBlue = pLedBlue;
+}*/
+
+/**
+ * @brief xxx
+ */
+RgbLedControl::RgbLedControl(gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_num_t ledBluePin){
+    m_pLedRed = new LedDriver(ledRedPin);
+    m_pLedGreen = new LedDriver(ledGreenPin);
+    m_pLedBlue = new LedDriver(ledBluePin);
+}
+
+/**
+ * @brief xxx
+ */
+void RgbLedControl::init(){
+    m_pLedRed->init();
+    m_pLedGreen->init();
+    m_pLedBlue->init();
 }
 
 /**

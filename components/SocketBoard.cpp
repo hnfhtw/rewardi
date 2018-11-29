@@ -13,14 +13,17 @@
 
 static const char* LOG_TAG = "SocketBoard";
 static std::map<void*, SocketBoard*> socketBoardMap;
-extern CommHandler commHandler;
+//extern CommHandler commHandler;
 
 /**
  * @brief Create a SocketBoard instance.
  */
-SocketBoard::SocketBoard(){
+SocketBoard::SocketBoard(gpio_num_t relaisPin){
 	m_socketID	= 0;
 	m_maxTime	= 60;
+	m_pRelaisDriver = new RelaisDriver(relaisPin);
+	m_hTimeout = 0;
+	m_pCommHandler = nullptr;
 }
 
 /**
@@ -35,6 +38,7 @@ SocketBoard::~SocketBoard(){
  * @brief xx
  */
 void SocketBoard::init(){
+    m_pRelaisDriver->init();
     m_hTimeout = xTimerCreate("sockMaxTime",  pdMS_TO_TICKS(m_maxTime*1000), pdFALSE, NULL, (TimerCallbackFunction_t) &SocketBoard::timeout);    // create and initialize maxTime timeout timer
     socketBoardMap.insert(std::make_pair(m_hTimeout, this));
 }
@@ -56,16 +60,9 @@ void SocketBoard::setMaxTime(uint32_t maxTime){
 /**
  * @brief xx
  */
-void SocketBoard::setRelaisDriver(RelaisDriver* pRelaisDriver){
-    m_pRelaisDriver = pRelaisDriver;
+void SocketBoard::setCommHandler(CommHandler* pCommHandler){
+    m_pCommHandler = pCommHandler;
 }
-
-/**
- * @brief xx
- */
-/*void SocketBoard::setSysControl(SysControl* pSysControl){
-    m_pSysControl = pSysControl;
-}*/
 
 /**
  * @brief xx
@@ -88,13 +85,6 @@ uint32_t SocketBoard::getMaxTime(){
 RelaisDriver* SocketBoard::getRelaisDriver(){
     return m_pRelaisDriver;
 }
-
-/**
- * @brief xx
- */
-/*SysControl* SocketBoard::getSysControl(){
-    return m_pSysControl;
-}*/
 
 /**
  * @brief xx
@@ -129,7 +119,7 @@ uint32_t SocketBoard::switchOff(bool isTimeout){
         sendData.value1 = duration_sec;
         sendData.value2 = 0;
         sendData.flag1 = false;
-        commHandler.addSendMessage(sendData);
+        m_pCommHandler->addSendMessage(sendData);
         //commHandler.sendSocketBoardEvent();           // die callback vom timer darf nicht zu lange blockieren sonst greift ein watchdog
     }
     return duration_sec;
