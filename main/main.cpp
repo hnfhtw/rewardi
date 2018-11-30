@@ -8,15 +8,6 @@
 #include "LockDriver.h"
 #include "StandbyControl.h"
 #include "RelaisDriver.h"
-#include "nvs_flash.h"
-
-//const char* DEVICE_DATA_PARTITION = "device_data\0";
-#define DEVICE_DATA_PARTITION       "device_data"
-#define DEVICE_DATA_NAMESPACE       "device_data"
-#define DEVICE_DATA_KEY_TRUSTNUMBER "trust_number"
-#define DEVICE_DATA_KEY_BACKENDURL  "backend_url"
-#define DEVICE_DATA_SIZE_TRUSTNUMBER    37      // 36 characters + termination '\0'
-#define DEVICE_DATA_SIZE_BACKENDURL     64
 
 // // device_data.bin file generieren mit trust_number aus generate_device_data.csv geht nur mit Python 2.x!!
 // 1) install esptool:  pip install esptool
@@ -31,9 +22,6 @@ extern "C" {
 BootWiFi bootWifi;
 TimerHandle_t hSysTick = NULL;      // 10ms SysTick (RTOS software timer) handle
 uint32_t sysTick;                   // 10ms SysTick variable
-StandbyControl standbyControl(GPIO_NUM_33); // GPIO_NUM_33 is a RTC pin, it is used as the Button pin -> necessary to wakeup from deep sleep
-
-static bool read_device_data(char* trustNumber, char* backendURL);
 
 void sysTick_notify(void){
     ++sysTick;
@@ -41,38 +29,29 @@ void sysTick_notify(void){
 
 void app_main(void)
 {
-    char trustNumber[DEVICE_DATA_SIZE_TRUSTNUMBER+1];
-    char backendURL[DEVICE_DATA_SIZE_BACKENDURL+1];
-
-    trustNumber[DEVICE_DATA_SIZE_TRUSTNUMBER] = '\0';
-    backendURL[DEVICE_DATA_SIZE_BACKENDURL] = '\0';
-
-    read_device_data(trustNumber, backendURL);
-    ESP_LOGD(LOG_TAG, "Trust number from flash = %s", trustNumber);
-    ESP_LOGD(LOG_TAG, "Backend URL from flash = %s", backendURL);
-
     SysControl* pSysControl = new SysControl();
-    pSysControl->setTrustNumber(trustNumber);
-    pSysControl->setBackendURL(backendURL);
+    pSysControl->init();
 
     CommHandler* pCommHandler = new CommHandler();
 
     SocketBoard* pSocketBoard = nullptr;
     Box* pBox = nullptr;
 
-    if(trustNumber[0] == '0'){          // trust number starting with 0 -> device is a SocketBoard
+    if(pSysControl->getTrustNumber().c_str()[0] == '1'){          // trust number starting with 1 -> device is a SocketBoard
         pSocketBoard = new SocketBoard(GPIO_NUM_32);
         pSocketBoard->init();
         pSocketBoard->setCommHandler(pCommHandler);
         pCommHandler->setSocketBoard(pSocketBoard);
         ESP_LOGD(LOG_TAG, "Device is a SocketBoard, init completed");
     }
-    else if(trustNumber[0] == '1'){     // trust number starting with 0 -> device is a Box
-        pBox = new Box(GPIO_NUM_12, GPIO_NUM_25, GPIO_NUM_26, GPIO_NUM_27, GPIO_NUM_33);
+    else if(pSysControl->getTrustNumber().c_str()[0] == '0'){     // trust number starting with 0 -> device is a Box
+        pBox = new Box(GPIO_NUM_13, GPIO_NUM_25, GPIO_NUM_27, GPIO_NUM_12, GPIO_NUM_33);
         pBox->init();
         pBox->setCommHandler(pCommHandler);
         pCommHandler->setBox(pBox);
         ESP_LOGD(LOG_TAG, "Device is a Box, init completed");
+        pBox->start();
+        ESP_LOGD(LOG_TAG, "Boxcode parser started!");
     }
 
     // create and initialize 10ms SysTick timer
@@ -84,51 +63,16 @@ void app_main(void)
     bootWifi.boot();
 
     // Connect to backend server
-    pSysControl->connectToServer();
+    //pSysControl->connectToServer();
 
     // Provide websocket socket to CommHandler and start it
-    pCommHandler->setSocket(pSysControl->getSocket());
-    pCommHandler->start();
+    //pCommHandler->setSocket(pSysControl->getSocket());
+    //pCommHandler->start();
 
-
-    // test standby - START
-    //standbyControl.init();
-    //standbyControl.enterSleepMode();
-    // test standby - END
-}
-
-static bool read_device_data(char* trustNumber, char* backendURL){
-    bool rtnVal = false;
-
-    esp_err_t err = nvs_flash_init_partition(DEVICE_DATA_PARTITION);
-    if (err != ESP_OK){
-        ESP_LOGD(LOG_TAG, " nvs_flash_init_partition() error = %d", err);
-        return rtnVal;
-    }
-
-    nvs_handle hNVS;
-    err = nvs_open_from_partition(DEVICE_DATA_PARTITION, DEVICE_DATA_NAMESPACE, NVS_READWRITE, &hNVS);
-    if (err != ESP_OK){
-        ESP_LOGD(LOG_TAG, " nvs_open_from_partition() error = %d", err);
-        return rtnVal;
-    }
-
-    size_t length = DEVICE_DATA_SIZE_TRUSTNUMBER;
-    err = nvs_get_str(hNVS, DEVICE_DATA_KEY_TRUSTNUMBER, trustNumber, &length);
-    if (err != ESP_OK){
-        ESP_LOGD(LOG_TAG, " nvs_get_str() error = %d", err);
-        return rtnVal;
-    }
-
-    length = DEVICE_DATA_SIZE_BACKENDURL;
-    err = nvs_get_str(hNVS, DEVICE_DATA_KEY_BACKENDURL, backendURL, &length);
-    if (err != ESP_OK){
-        ESP_LOGD(LOG_TAG, " nvs_get_str() error = %d", err);
-        return rtnVal;
-    }
-
-    nvs_close(hNVS);
-
-    return rtnVal;
+    // Test status LED and lock
+    //pBox->getRgbLedControl()->setColor(RgbLedControl::Color::WHITE);
+    //pBox->getLockDriver()->switchOn();
+    //vTaskDelay(pdMS_TO_TICKS(1000));
+    //pBox->getRgbLedControl()->setColor(RgbLedControl::Color::BLACK);
 }
 

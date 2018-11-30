@@ -89,55 +89,74 @@ bool CommHandler::parseMessage(const char* message){
                 JsonObject maxTimeObject = data.getObject(0);
                 m_pSocketBoard->setMaxTime(maxTimeObject.getInt("maxTime"));
                 ESP_LOGD(LOG_TAG, "MSG_ID_ACTIVATESOCKET received, %d data elements, maxTime = %d", numberOfDataElements, m_pSocketBoard->getMaxTime());
-                // HN-CHECK: Todo: switch on socket for maxTime
-                m_pSocketBoard->switchOn();
+                m_pSocketBoard->switchOn();     // switch on socket for maxTime
 		    }
 			break;
 		}
 		case MSG_ID_DEACTIVATESOCKET: {
             if(m_pSocketBoard != nullptr && m_pBox == nullptr){
                 ESP_LOGD(LOG_TAG, "MSG_ID_DEACTIVATESOCKET received");
-                // HN-CHECK: Todo: switch off socket, reset maxTime timer
-                // and send MSG_ID_DEACTIVATESOCKET_RESP
-                uint32_t duration_sec = m_pSocketBoard->switchOff(false);
-
+                uint32_t duration_sec = m_pSocketBoard->switchOff(false);   // switch off socket, stop maxTime timer
                 CommHandlerSendData_t sendData;
                 sendData.msgID = MSG_ID_SETSOCKETEVENT;
                 sendData.value1 = duration_sec;
                 sendData.value2 = 0;
                 sendData.flag1 = false;
-                addSendMessage(sendData);
-                //sendSocketBoardEvent();
+                addSendMessage(sendData);   // send MSG_ID_SETSOCKETEVENT to server
             }
 			break;
 		}
 		case MSG_ID_REQUESTOPEN_RESP: {
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
+                JsonArray data = obj.getArray("data");
+                uint32_t numberOfDataElements = data.size();
+                JsonObject isAllowedObject = data.getObject(0);
+                bool isAllowed = isAllowedObject.getBoolean("isAllowed");
+                ESP_LOGD(LOG_TAG, "MSG_ID_REQUESTOPEN_RESP received, %d data elements, isAllowed = %d", numberOfDataElements, isAllowed);
+                if(isAllowed){    // switch on allowed
 
+                }
+                else{   // switch on not allowed
+
+                }
             }
 			break;
 		}
 		case MSG_ID_GETBOXDATA_RESP: {
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
-
+                JsonArray data = obj.getArray("data");
+                uint32_t numberOfDataElements = data.size();
+                JsonObject ownerObject = data.getObject(0);
+                uint32_t ownerID = ownerObject.getInt("owner");
+                m_pBox->setOwner(ownerID);        // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
+                JsonObject isLockedObject = data.getObject(1);
+                bool isLocked = isLockedObject.getBoolean("isLocked");
+                m_pBox->setIsLocked(isLocked);              // HN-CHECK -> set if box is locked
+                ESP_LOGD(LOG_TAG, "MSG_ID_GETBOXDATA_RESP received, %d data elements, ownerID = %d, isLocked = %d", numberOfDataElements, ownerID, isLocked);
             }
 			break;
 		}
 		case MSG_ID_STARTBOXCODEPARSING: {
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
-
+                //m_pBox->getBoxCodeParser()->startParsing(m_pBox->getOwner());
             }
 			break;
 		}
 		case MSG_ID_STOPBOXCODEPARSING: {
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
-
+                //m_pBox->getBoxCodeParser()->stopParsing(m_pBox->getOwner());
             }
 			break;
 		}
 		case MSG_ID_LOCKBOX: {
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
-
+                JsonArray data = obj.getArray("data");
+                uint32_t numberOfDataElements = data.size();
+                JsonObject ownerObject = data.getObject(0);
+                uint32_t ownerID = ownerObject.getInt("owner");
+                m_pBox->setOwner(ownerID);    // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
+                m_pBox->setIsLocked(true);              // HN-CHECK -> set if box is locked
+                ESP_LOGD(LOG_TAG, "MSG_ID_LOCKBOX received, %d data elements, ownerID = %d", numberOfDataElements, ownerID);
             }
 			break;
 		}

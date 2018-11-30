@@ -38,10 +38,15 @@ gpio_num_t RelaisDriver::getPin(){
  * @brief xxx
  */
 void RelaisDriver::init(){
-    gpio_set_direction(m_relaisPin, GPIO_MODE_OUTPUT);    // set gpio pin as output
+    gpio_config_t io_conf;
+    io_conf.intr_type = GPIO_INTR_DISABLE;          //disable interrupt
+    io_conf.mode = GPIO_MODE_OUTPUT;                //set pin as output mode
+    io_conf.pin_bit_mask = (1<<m_relaisPin);          //bit mask of pin
+    io_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;    //enable pull-down resistor
+    io_conf.pull_up_en = GPIO_PULLUP_DISABLE;       //disable pull-up resistor
+    gpio_config(&io_conf);                          //configure GPIO with the given settings
+
     gpio_set_level(m_relaisPin, 0);
-    gpio_pullup_dis(m_relaisPin);
-    gpio_pulldown_en(m_relaisPin);
 }
 
 /**

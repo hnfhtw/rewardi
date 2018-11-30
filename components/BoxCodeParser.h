@@ -14,6 +14,8 @@ class BoxCodeParser {
 public:
     BoxCodeParser(gpio_num_t buttonPin);
     void            init();
+    void            start();
+    ButtonDriver*   getButtonDriver();
 private:
     ButtonDriver*   m_pButtonDriver;
 };
