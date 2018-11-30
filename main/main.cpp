@@ -31,7 +31,7 @@ extern "C" {
 BootWiFi bootWifi;
 TimerHandle_t hSysTick = NULL;      // 10ms SysTick (RTOS software timer) handle
 uint32_t sysTick;                   // 10ms SysTick variable
-StandbyControl standbyControl(GPIO_NUM_0);
+StandbyControl standbyControl(GPIO_NUM_33); // GPIO_NUM_33 is a RTC pin, it is used as the Button pin -> necessary to wakeup from deep sleep
 
 static bool read_device_data(char* trustNumber, char* backendURL);
 
