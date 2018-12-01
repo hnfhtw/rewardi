@@ -49,8 +49,9 @@ void app_main(void)
         pBox->init();
         pBox->setCommHandler(pCommHandler);
         pCommHandler->setBox(pBox);
+        pBox->setOwner(1);      // HN-CHECK DEBUG ONLY - Set userID 1 as owner
         ESP_LOGD(LOG_TAG, "Device is a Box, init completed");
-        pBox->start();
+        pBox->start();          // HN-CHECK DEBUG ONLY - don't do it here!! do it when server connection is established!
         ESP_LOGD(LOG_TAG, "Boxcode parser started!");
     }
 

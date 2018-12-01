@@ -138,7 +138,8 @@ Box.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/string.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/lwip/err.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SocketBoard.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h:
 
@@ -417,4 +418,6 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SocketBoard.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h:
 /home/Harald.Netzer/esp/rewardi/components/./Box.cpp:

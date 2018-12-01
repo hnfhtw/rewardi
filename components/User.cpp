@@ -5,7 +5,11 @@
  *      Author: HN
  */
 
+#include <esp_log.h>
 #include "User.h"
+
+
+static const char* LOG_TAG = "User";
 
 /**
  * @brief Create a User instance.
@@ -36,6 +40,7 @@ void User:: setUserID(uint32_t userID){
  * @brief xx
  */
 void User::setBoxCode(uint8_t boxCode){
+    ESP_LOGD(LOG_TAG, "New boxCode set = %d", boxCode);
 	m_boxCode = boxCode;
 }
 

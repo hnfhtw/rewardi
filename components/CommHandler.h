@@ -31,8 +31,6 @@ class Box;          // forward declaration to avoid error caused by recursive in
 class CommHandler {
 public:
 	CommHandler();
-	//void setSysControl(SysControl* pSysControl);
-	//SysControl* getSysControl();
 	void setBox(Box* pBox);
 	Box* getBox();
     void setSocketBoard(SocketBoard* pSocketBoard);
@@ -49,7 +47,6 @@ private:
     Socket* m_pSocket;
 	Box* m_pBox;
 	SocketBoard* m_pSocketBoard;
-	//SysControl* m_pSysControl;
 	uint8_t m_pReceiveBuffer[512];
 	std::string m_sessionToken;
 	QueueHandle_t m_sendDataQueue;

@@ -17,6 +17,7 @@
 #include "CommHandler.h"
 
 class CommHandler;  // forward declaration to avoid error caused by recursive inclusion (Box.h includes CommHandler.h and vice versa)
+class BoxCodeParser;
 
 #define BOX_MAX_NR_OF_USERS 5
 
@@ -28,14 +29,13 @@ public:
 	void			setOwner(uint32_t ownerID);
 	void            setCommHandler(CommHandler* pCommHandler);
     void            setIsLocked(bool isLocked);
-	//void            setLockDriver(LockDriver* pLockDriver);
-	//void            setRgbLedControl(RgbLedControl* pRgbLedControl);
-	//void            setBoxCodeParser(BoxCodeParser* pBoxCodeParser);
 	User*			getOwner();
 	LockDriver*     getLockDriver();
 	RgbLedControl*  getRgbLedControl();
 	BoxCodeParser*  getBoxCodeParser();
     bool            getIsLocked();
+    void            requestBoxOpen(uint8_t boxCode);    // called by BoxCodeParser if a valid 5 digit box code was entered
+    void            open();
 
 private:
 	User*	    	m_pOwner;

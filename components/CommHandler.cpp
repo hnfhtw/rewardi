@@ -18,20 +18,11 @@ static const char* LOG_TAG = "CommHandler";
  */
 CommHandler::CommHandler(){
     m_pSocket = nullptr;
-    //m_pSysControl = nullptr;
     m_pBox = nullptr;
     m_pSocketBoard = nullptr;
     m_sessionToken = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     m_sendDataQueue = nullptr;
 }
-
-/*void CommHandler::setSysControl(SysControl* pSysControl){
-    m_pSysControl = pSysControl;
-}
-
-SysControl* CommHandler::getSysControl(){
-    return m_pSysControl;
-}*/
 
 void CommHandler::setBox(Box* pBox){
 	m_pBox = pBox;
@@ -67,11 +58,9 @@ bool CommHandler::parseMessage(const char* message){
 
 	switch(msgID){
 	    case MSG_ID_INIT: {
-	        JsonArray data = obj.getArray("data");
-	        uint32_t numberOfDataElements = data.size();
-	        ESP_LOGD(LOG_TAG, "Number of array elements = %d", numberOfDataElements);
-	        m_sessionToken = data.getObject(0).getString("token").c_str();
-	        ESP_LOGD(LOG_TAG, "MSG_ID_INIT received, %d data elements, trust number = %s", numberOfDataElements, m_sessionToken.c_str());
+	        JsonObject data = obj.getObject("data");
+	        m_sessionToken = data.getString("token").c_str();
+	        ESP_LOGD(LOG_TAG, "MSG_ID_INIT received, trust number = %s", m_sessionToken.c_str());
 	        break;
 	    }
 		case MSG_ID_ACK: {
@@ -84,11 +73,10 @@ bool CommHandler::parseMessage(const char* message){
 		}
 		case MSG_ID_ACTIVATESOCKET: {
 		    if(m_pSocketBoard != nullptr && m_pBox == nullptr){
-                JsonArray data = obj.getArray("data");
-                uint32_t numberOfDataElements = data.size();
-                JsonObject maxTimeObject = data.getObject(0);
-                m_pSocketBoard->setMaxTime(maxTimeObject.getInt("maxTime"));
-                ESP_LOGD(LOG_TAG, "MSG_ID_ACTIVATESOCKET received, %d data elements, maxTime = %d", numberOfDataElements, m_pSocketBoard->getMaxTime());
+		        JsonObject data = obj.getObject("data");
+		        uint32_t maxTime_sec = data.getInt("maxTime");
+                m_pSocketBoard->setMaxTime(maxTime_sec);
+                ESP_LOGD(LOG_TAG, "MSG_ID_ACTIVATESOCKET received, maxTime = %d", maxTime_sec);
                 m_pSocketBoard->switchOn();     // switch on socket for maxTime
 		    }
 			break;
@@ -108,31 +96,27 @@ bool CommHandler::parseMessage(const char* message){
 		}
 		case MSG_ID_REQUESTOPEN_RESP: {
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
-                JsonArray data = obj.getArray("data");
-                uint32_t numberOfDataElements = data.size();
-                JsonObject isAllowedObject = data.getObject(0);
-                bool isAllowed = isAllowedObject.getBoolean("isAllowed");
-                ESP_LOGD(LOG_TAG, "MSG_ID_REQUESTOPEN_RESP received, %d data elements, isAllowed = %d", numberOfDataElements, isAllowed);
+                JsonObject data = obj.getObject("data");
+                bool isAllowed = data.getBoolean("isAllowed");
+                ESP_LOGD(LOG_TAG, "MSG_ID_REQUESTOPEN_RESP received, isAllowed = %d", isAllowed);
                 if(isAllowed){    // switch on allowed
-
+                    m_pBox->open();
+                    // HN-CHECK set LED to GREEN for some seconds
                 }
                 else{   // switch on not allowed
-
+                    // HN-CHECK set LED to RED for some seconds
                 }
             }
 			break;
 		}
 		case MSG_ID_GETBOXDATA_RESP: {
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
-                JsonArray data = obj.getArray("data");
-                uint32_t numberOfDataElements = data.size();
-                JsonObject ownerObject = data.getObject(0);
-                uint32_t ownerID = ownerObject.getInt("owner");
-                m_pBox->setOwner(ownerID);        // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
-                JsonObject isLockedObject = data.getObject(1);
-                bool isLocked = isLockedObject.getBoolean("isLocked");
+                JsonObject data = obj.getObject("data");
+                uint32_t ownerID = data.getInt("owner");
+                m_pBox->setOwner(ownerID);                  // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
+                bool isLocked = data.getBoolean("isLocked");
                 m_pBox->setIsLocked(isLocked);              // HN-CHECK -> set if box is locked
-                ESP_LOGD(LOG_TAG, "MSG_ID_GETBOXDATA_RESP received, %d data elements, ownerID = %d, isLocked = %d", numberOfDataElements, ownerID, isLocked);
+                ESP_LOGD(LOG_TAG, "MSG_ID_GETBOXDATA_RESP received, ownerID = %d, isLocked = %d", ownerID, isLocked);
             }
 			break;
 		}
@@ -150,13 +134,19 @@ bool CommHandler::parseMessage(const char* message){
 		}
 		case MSG_ID_LOCKBOX: {
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
-                JsonArray data = obj.getArray("data");
-                uint32_t numberOfDataElements = data.size();
-                JsonObject ownerObject = data.getObject(0);
-                uint32_t ownerID = ownerObject.getInt("owner");
+                JsonObject data = obj.getObject("data");
+                uint32_t ownerID = data.getInt("owner");
                 m_pBox->setOwner(ownerID);    // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
-                m_pBox->setIsLocked(true);              // HN-CHECK -> set if box is locked
-                ESP_LOGD(LOG_TAG, "MSG_ID_LOCKBOX received, %d data elements, ownerID = %d", numberOfDataElements, ownerID);
+                m_pBox->setIsLocked(true);    // HN-CHECK -> set if box is locked
+                ESP_LOGD(LOG_TAG, "MSG_ID_LOCKBOX received, ownerID = %d", ownerID);
+
+                // send ACK to server to confirm box locked
+                uint32_t refuid = obj.getInt("uid");
+                CommHandlerSendData_t sendData;
+                sendData.msgID = MSG_ID_ACK;
+                sendData.value1 = refuid;
+                addSendMessage(sendData);   // send MSG_ID_ACK to server
+
             }
 			break;
 		}
@@ -181,27 +171,19 @@ bool CommHandler::sendData(CommHandlerSendData_t sendData){
     switch(sendData.msgID){
         case MSG_ID_ACK: {
             obj.setInt("type", MSG_ID_ACK);
-            JsonArray data = JSON::createArray();
-            JsonObject refuid = JSON::createObject();
-            refuid.setInt("refuid", sendData.value1);
-            data.addObject(refuid);
-            obj.setArray("data", data);
+            JsonObject data = JSON::createObject();
+            data.setInt("refuid", sendData.value1);
+            obj.setObject("data", data);
             ESP_LOGD(LOG_TAG, "Send MSG_ID_ACK: %s", obj.toStringUnformatted().c_str());
             break;
         }
         case MSG_ID_NACK: {
             obj.setInt("type", MSG_ID_NACK);
-            JsonArray data = JSON::createArray();
-            JsonObject errornumber = JSON::createObject();
-            errornumber.setInt("errno", sendData.value2);
-            JsonObject message = JSON::createObject();
-            message.setString("message", "ESP32 NACK");
-            JsonObject refuid = JSON::createObject();
-            refuid.setInt("refuid", sendData.value1);
-            data.addObject(errornumber);
-            data.addObject(message);
-            data.addObject(refuid);
-            obj.setArray("data", data);
+            JsonObject data = JSON::createObject();
+            data.setInt("errno", sendData.value2);
+            data.setString("message", "ESP32 NACK");
+            data.setInt("refuid", sendData.value1);
+            obj.setObject("data", data);
             ESP_LOGD(LOG_TAG, "Send MSG_ID_NACK: %s", obj.toStringUnformatted().c_str());
             break;
         }
@@ -223,17 +205,11 @@ bool CommHandler::sendData(CommHandlerSendData_t sendData){
         }
         case MSG_ID_SETSOCKETEVENT: {
             obj.setInt("type", MSG_ID_SETSOCKETEVENT);
-            JsonArray data = JSON::createArray();
-            JsonObject duration = JSON::createObject();
-            duration.setInt("duration", sendData.value1);
-            JsonObject deltaTime = JSON::createObject();
-            deltaTime.setInt("deltaTime", sendData.value2);
-            JsonObject isTimeout = JSON::createObject();
-            isTimeout.setBoolean("isTimeout", sendData.flag1);
-            data.addObject(duration);
-            data.addObject(deltaTime);
-            data.addObject(isTimeout);
-            obj.setArray("data", data);
+            JsonObject data = JSON::createObject();
+            data.setInt("duration", sendData.value1);
+            data.setInt("deltaTime", sendData.value2);
+            data.setBoolean("isTimeout", sendData.flag1);
+            obj.setObject("data", data);
             ESP_LOGD(LOG_TAG, "Send MSG_ID_SETSOCKETEVENT: %s", obj.toStringUnformatted().c_str());
             break;
         }

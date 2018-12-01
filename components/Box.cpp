@@ -6,6 +6,7 @@
  */
 
 #include "Box.h"
+#include "messageIDs.h"
 
 /**
  * @brief Create a Box instance.
@@ -14,7 +15,7 @@ Box::Box(gpio_num_t lockPin, gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_
 	m_pOwner			= nullptr;
     m_pLockDriver       = new LockDriver(lockPin);
     m_pRgbLedControl    = new RgbLedControl(ledRedPin, ledGreenPin, ledBluePin);
-    m_pBoxCodeParser    = new BoxCodeParser(buttonPin);
+    m_pBoxCodeParser    = new BoxCodeParser(buttonPin, this);
     m_pCommHandler      = nullptr;
     m_userListSize      = 0;
     m_isLocked          = false;
@@ -34,7 +35,11 @@ void Box::init(){
  * @brief xx
  */
 void Box::start(){
-    m_pBoxCodeParser->start();
+    CommHandlerSendData_t sendData;         // obtain box owner and isLocked status at startup
+    sendData.msgID = MSG_ID_GETBOXDATA;
+    m_pCommHandler->addSendMessage(sendData);   // send MSG_ID_REQUESTOPEN to server
+
+    m_pBoxCodeParser->start();  // start box code parser
 }
 
 
@@ -93,18 +98,6 @@ void Box::setIsLocked(bool isLocked){
     m_isLocked = isLocked;
 }
 
-/*void Box::setLockDriver(LockDriver* pLockDriver){
-    m_pLockDriver = pLockDriver;
-}
-
-void Box::setRgbLedControl(RgbLedControl* pRgbLedControl){
-    m_pRgbLedControl = pRgbLedControl;
-}
-
-void Box::setBoxCodeParser(BoxCodeParser* pBoxCodeParser){
-    m_pBoxCodeParser = pBoxCodeParser;
-}*/
-
 /**
  * @brief xx
  */
@@ -140,4 +133,22 @@ bool Box::getIsLocked(){
     return m_isLocked;
 }
 
+/**
+ * @brief xx
+ */
+void Box::requestBoxOpen(uint8_t boxCode){
+    if(boxCode == m_pOwner->getBoxCode()){  // send open box request to server if the box code of the current user (owner) was entered
+        CommHandlerSendData_t sendData;
+        sendData.msgID = MSG_ID_REQUESTOPEN;
+        m_pCommHandler->addSendMessage(sendData);   // send MSG_ID_REQUESTOPEN to server
+    }
+}
+
+/**
+ * @brief xx
+ */
+void Box::open(){
+    m_pLockDriver->switchOn();
+    // HN-CHECK switch LED to GREEN for 5s
+}
 
