@@ -40,7 +40,7 @@ public:
     bool addSendMessage(CommHandlerSendData_t data);
     bool closeWebsocket();
     void start();
-
+    void stop();
 private:
     friend class CommHandlerReceiveTask;
     friend class CommHandlerSendTask;
@@ -54,6 +54,8 @@ private:
     bool sendEncodedRawData(char const *str, uint8_t opcode);
     bool receiveData();
     bool parseMessage(const char* message);
+    CommHandlerSendTask* m_pCommHandlerSendTask;
+    CommHandlerReceiveTask* m_pCommHandlerReceiveTask;
 };
 
 // WebSocket protocol constants

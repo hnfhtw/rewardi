@@ -29,6 +29,15 @@ User::User(uint32_t userID){
 
 
 /**
+ * @brief Create a User instance.
+ */
+User::User(uint32_t userID, uint8_t boxCode){
+    m_userID    = userID;
+    m_boxCode   = boxCode;
+}
+
+
+/**
  * @brief xx
  */
 void User:: setUserID(uint32_t userID){

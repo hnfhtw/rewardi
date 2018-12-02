@@ -14,9 +14,11 @@
 #include "StandbyControl.h"
 
 class SocketBoard;
+class CommHandler;
 
 class SysControl {
 public:
+    enum DeviceType{BOX=1,SOCKET=2};
 	SysControl();
 	void            init();
 	void			setBackendURL(std::string backendURL);
@@ -30,12 +32,18 @@ public:
     bool            connectToServer();
     void            enterDeepSleepMode();
     bool            readDeviceData(char* trustNumber, char* backendURL);
+    void            setDeviceType(DeviceType type);
+    DeviceType      getDeviceType();
+    void            setStayAwake(bool stayAwake);
+    bool            getStayAwake();
 private:
 	std::string		m_backendURL;
 	std::string		m_trustNumber;
     CommHandler*    m_pCommHandler;
     Socket*         m_pSocket;
     StandbyControl* m_pStandbyControl;
+    DeviceType      m_deviceType;
+    bool            m_stayAwake;
 };
 
 #endif /* COMPONENTS_SYSCONTROL_H_ */

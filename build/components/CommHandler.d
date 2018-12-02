@@ -148,16 +148,18 @@ CommHandler.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/include/sys/string.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/lwip/lwip/err.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/ringbuf.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/timers.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/task.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RgbLedControl.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCodeParser.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/ButtonDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SocketBoard.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h \
@@ -461,10 +463,6 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/lwip/include/
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/Box.h:
 
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h:
-
-C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h:
-
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/cpp_utils/FreeRTOS.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/ringbuf.h:
@@ -473,6 +471,10 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/incl
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/freertos/include/freertos/task.h:
 
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/User.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h:
+
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RgbLedControl.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h:
@@ -480,6 +482,10 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h:
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCodeParser.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/ButtonDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SocketBoard.h:
 

@@ -99,6 +99,7 @@ private:
                 parsedCommand |= (1 << 7);  // indicate that new command started
             }
             else if(isButtonPressed && symbolTimerRunning == true){
+                m_pBoxCodeParser->getBox()->stayAwake();        // HN-CHECK Reset 60s stay awake timer to avoid going to sleep mode while user works with box
             }
             else if(symbolTimerRunning == true){
                 symbolEndTick = tick;
@@ -123,7 +124,7 @@ private:
                             uint8_t newBoxCode = parsedCommand & ~(1<<7);
                             ESP_LOGD(LOG_TAG, "Recorded 5 digit box code = %d", newBoxCode);
                             // inform box about new box code for current user
-                            m_pBoxCodeParser->getBox()->getOwner()->setBoxCode(newBoxCode);
+                            m_pBoxCodeParser->getBox()->setBoxCode(newBoxCode);
                             parsedCommandIndex = 0;
                             parsedCommand = 0;
                             pauseTimerRunning = false;

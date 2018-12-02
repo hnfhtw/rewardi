@@ -13,7 +13,7 @@
 
 static const char* LOG_TAG = "SocketBoard";
 static std::map<void*, SocketBoard*> socketBoardMap;
-//extern CommHandler commHandler;
+
 
 /**
  * @brief Create a SocketBoard instance.

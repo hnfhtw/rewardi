@@ -7,11 +7,6 @@
 
 #include "RelaisDriver.h"
 
-/**
- * @brief xxx
- */
-RelaisDriver::RelaisDriver(){
-}
 
 /**
  * @brief xxx

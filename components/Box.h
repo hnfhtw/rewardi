@@ -9,21 +9,25 @@
 #define COMPONENTS_BOX_H_
 
 #include <stdint.h>
-#include <string>
+#include <FreeRTOS.h>
+#include <freertos/timers.h>
 #include "User.h"
 #include "LockDriver.h"
 #include "RgbLedControl.h"
 #include "BoxCodeParser.h"
 #include "CommHandler.h"
+#include "SysControl.h"
 
 class CommHandler;  // forward declaration to avoid error caused by recursive inclusion (Box.h includes CommHandler.h and vice versa)
 class BoxCodeParser;
+class SysControl;
 
 #define BOX_MAX_NR_OF_USERS 5
 
 class Box {
 public:
 	Box(gpio_num_t lockPin, gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_num_t ledBluePin, gpio_num_t buttonPin);
+	~Box();
 	void            init();
     void            start();
 	void			setOwner(uint32_t ownerID);
@@ -36,7 +40,10 @@ public:
     bool            getIsLocked();
     void            requestBoxOpen(uint8_t boxCode);    // called by BoxCodeParser if a valid 5 digit box code was entered
     void            open();
-
+    void            setBoxCode(uint8_t boxCode);
+    void            stayAwake();
+    static void timeout(TimerHandle_t xTimer);
+    SysControl*     m_pSysControl;
 private:
 	User*	    	m_pOwner;
     bool            m_isLocked;
@@ -46,6 +53,9 @@ private:
 	CommHandler*    m_pCommHandler;
 	User*           m_userList[BOX_MAX_NR_OF_USERS];
 	uint32_t        m_userListSize;
+    bool            readUserListData();
+    bool            writeUserListData();
+    TimerHandle_t   m_hTimeout;
 };
 
 #endif /* COMPONENTS_BOX_H_ */

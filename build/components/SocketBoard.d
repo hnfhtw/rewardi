@@ -139,6 +139,8 @@ SocketBoard.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCodeParser.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/ButtonDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log_internal.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h
@@ -420,6 +422,10 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LedDriver.h:
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/BoxCodeParser.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/ButtonDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
 

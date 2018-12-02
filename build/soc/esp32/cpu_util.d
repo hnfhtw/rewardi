@@ -84,3 +84,4 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/newlib/includ
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/rtc_cntl_reg.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/include/soc/soc.h:
+/home/Harald.Netzer/esp/esp-idf/components/soc/esp32/cpu_util.c:

@@ -15,11 +15,6 @@
 static const char* LOG_TAG = "LockDriver";
 static std::map<void*, LockDriver*> lockDriverMap;
 
-/**
- * @brief xxx
- */
-LockDriver::LockDriver(){
-}
 
 /**
  * @brief xxx

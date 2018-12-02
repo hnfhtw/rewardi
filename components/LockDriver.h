@@ -14,7 +14,6 @@
 
 class LockDriver {
 public:
-    LockDriver();
     LockDriver(gpio_num_t lockPin);
     ~LockDriver();
     void setPin(gpio_num_t lockPin);

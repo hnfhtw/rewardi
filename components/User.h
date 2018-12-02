@@ -14,6 +14,7 @@ class User {
 public:
 	User();
 	User(uint32_t userID);
+	User(uint32_t userID, uint8_t boxCode);
 	void            setUserID(uint32_t userID);
 	void			setBoxCode(uint8_t boxCode);
 	uint32_t		getUserID();

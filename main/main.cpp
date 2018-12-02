@@ -37,22 +37,22 @@ void app_main(void)
     SocketBoard* pSocketBoard = nullptr;
     Box* pBox = nullptr;
 
-    if(pSysControl->getTrustNumber().c_str()[0] == '1'){          // trust number starting with 1 -> device is a SocketBoard
+    if(pSysControl->getTrustNumber().c_str()[0] == '2'){          // trust number starting with 2 -> device is a SocketBoard
         pSocketBoard = new SocketBoard(GPIO_NUM_32);
         pSocketBoard->init();
         pSocketBoard->setCommHandler(pCommHandler);
         pCommHandler->setSocketBoard(pSocketBoard);
+        pSysControl->setDeviceType(SysControl::DeviceType::SOCKET);
         ESP_LOGD(LOG_TAG, "Device is a SocketBoard, init completed");
     }
-    else if(pSysControl->getTrustNumber().c_str()[0] == '0'){     // trust number starting with 0 -> device is a Box
+    else if(pSysControl->getTrustNumber().c_str()[0] == '1'){     // trust number starting with 1 -> device is a Box
         pBox = new Box(GPIO_NUM_13, GPIO_NUM_25, GPIO_NUM_27, GPIO_NUM_12, GPIO_NUM_33);
         pBox->init();
         pBox->setCommHandler(pCommHandler);
         pCommHandler->setBox(pBox);
-        pBox->setOwner(1);      // HN-CHECK DEBUG ONLY - Set userID 1 as owner
+        pSysControl->setDeviceType(SysControl::DeviceType::BOX);
+        pBox->m_pSysControl = pSysControl;          // HN-CHECK DEBUG ONLY - give reference to SysControl
         ESP_LOGD(LOG_TAG, "Device is a Box, init completed");
-        pBox->start();          // HN-CHECK DEBUG ONLY - don't do it here!! do it when server connection is established!
-        ESP_LOGD(LOG_TAG, "Boxcode parser started!");
     }
 
     // create and initialize 10ms SysTick timer
@@ -64,16 +64,26 @@ void app_main(void)
     bootWifi.boot();
 
     // Connect to backend server
-    //pSysControl->connectToServer();
+    pSysControl->connectToServer();
 
     // Provide websocket socket to CommHandler and start it
-    //pCommHandler->setSocket(pSysControl->getSocket());
-    //pCommHandler->start();
+    pCommHandler->setSocket(pSysControl->getSocket());
+    pCommHandler->start();
 
-    // Test status LED and lock
-    //pBox->getRgbLedControl()->setColor(RgbLedControl::Color::WHITE);
-    //pBox->getLockDriver()->switchOn();
-    //vTaskDelay(pdMS_TO_TICKS(1000));
-    //pBox->getRgbLedControl()->setColor(RgbLedControl::Color::BLACK);
+    if(pSysControl->getDeviceType() == SysControl::DeviceType::BOX){
+        // Start box
+        vTaskDelay(pdMS_TO_TICKS(2000));    // HN-CHECK DEBUG -> wait until session token is received!
+        pBox->start();          // HN-CHECK do it when server connection is established!
+        pBox->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+    }
+
+    // stay awake until desired by SysControl, afterwards close websocket connection and enter deep sleep mode
+    while(pSysControl->getStayAwake()){
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+    pCommHandler->stop();
+    pSysControl->getSocket()->close();
+    vTaskDelay(pdMS_TO_TICKS(2000));
+    pSysControl->enterDeepSleepMode();
 }
 

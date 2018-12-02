@@ -60,7 +60,7 @@ bool CommHandler::parseMessage(const char* message){
 	    case MSG_ID_INIT: {
 	        JsonObject data = obj.getObject("data");
 	        m_sessionToken = data.getString("token").c_str();
-	        ESP_LOGD(LOG_TAG, "MSG_ID_INIT received, trust number = %s", m_sessionToken.c_str());
+	        ESP_LOGD(LOG_TAG, "MSG_ID_INIT received, session token = %s", m_sessionToken.c_str());
 	        break;
 	    }
 		case MSG_ID_ACK: {
@@ -101,6 +101,9 @@ bool CommHandler::parseMessage(const char* message){
                 ESP_LOGD(LOG_TAG, "MSG_ID_REQUESTOPEN_RESP received, isAllowed = %d", isAllowed);
                 if(isAllowed){    // switch on allowed
                     m_pBox->open();
+                    CommHandlerSendData_t sendData;
+                    sendData.msgID = MSG_ID_SETBOXEVENT;
+                    addSendMessage(sendData);   // send MSG_ID_SETBOXEVENT to server, HN-CHECK TODO: Send it only when box was really opened!
                     // HN-CHECK set LED to GREEN for some seconds
                 }
                 else{   // switch on not allowed
@@ -136,7 +139,7 @@ bool CommHandler::parseMessage(const char* message){
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
                 JsonObject data = obj.getObject("data");
                 uint32_t ownerID = data.getInt("owner");
-                m_pBox->setOwner(ownerID);    // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
+                //m_pBox->setOwner(ownerID);    // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
                 m_pBox->setIsLocked(true);    // HN-CHECK -> set if box is locked
                 ESP_LOGD(LOG_TAG, "MSG_ID_LOCKBOX received, ownerID = %d", ownerID);
 
@@ -352,7 +355,7 @@ private:
         m_pCommHandler = (CommHandler*) data;   // The passed in data is an instance of an CommHandler.
 
         while (true) {   // Loop forever.
-            ESP_LOGD("CommHandlerReceiveTask", "Waiting for new input data");
+            //ESP_LOGD("CommHandlerReceiveTask", "Waiting for new input data");
             m_pCommHandler->receiveData();
         } // while
     } // run
@@ -385,7 +388,7 @@ private:
         sendData.flag2 = false;
 
         while (true) {   // Loop forever.
-            ESP_LOGD("CommHandlerSendTask", "Waiting for data to send");
+            //ESP_LOGD("CommHandlerSendTask", "Waiting for data to send");
             if(xQueueReceive(m_pCommHandler->m_sendDataQueue,&sendData,pdMS_TO_TICKS(1000))){
                 m_pCommHandler->sendData(sendData);  // send out data if there is something added to the queue
             }
@@ -400,10 +403,16 @@ void CommHandler::start(){
         ESP_LOGD(LOG_TAG, "Failed to create sendDataQueue!");
     }
 
-    CommHandlerSendTask* pCommHandlerSendTask = new CommHandlerSendTask("CommHandlerSendTask");
-    pCommHandlerSendTask->start(this);
+    m_pCommHandlerSendTask = new CommHandlerSendTask("CommHandlerSendTask");
+    m_pCommHandlerSendTask->start(this);
 
-    CommHandlerReceiveTask* pCommHandlerReceiveTask = new CommHandlerReceiveTask("CommHandlerReceiveTask");
-    pCommHandlerReceiveTask->start(this);
+    m_pCommHandlerReceiveTask = new CommHandlerReceiveTask("CommHandlerReceiveTask");
+    m_pCommHandlerReceiveTask->start(this);
+}
+
+void CommHandler::stop(){
+    closeWebsocket();
+    m_pCommHandlerSendTask->stop();
+    m_pCommHandlerReceiveTask->stop();
 }
 

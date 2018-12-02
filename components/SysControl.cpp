@@ -100,7 +100,7 @@ Socket* SysControl::getSocket(){
  * @brief xx
  */
 bool SysControl::connectToServer(){
-    std::string websocketHandShakeRequest = "GET /ws/sockets/";
+    std::string websocketHandShakeRequest = "GET /ws/boxes/";         // HN-CHECK todo: send to /ws/boxes if it is a box, send to /ws/sockets/ if it is a socket
     websocketHandShakeRequest += getTrustNumber();
     websocketHandShakeRequest += " HTTP/1.1\r\nHost: ";
     websocketHandShakeRequest += getBackendURL();
@@ -113,7 +113,7 @@ bool SysControl::connectToServer(){
         ESP_LOGD(LOG_TAG, " Websocket connected - SSL handshake done");     // HN-CHECK DEBUG
         ESP_LOGD(LOG_TAG, " Websocket handshake = %s", websocketHandShakeRequest.c_str());  // HN-CHECK DEBUG
     m_pSocket->send(websocketHandShakeRequest);  // send websocket handshake request -> this requests a protocol change from HTTP to Websocket
-    vTaskDelay(500);
+    vTaskDelay(pdMS_TO_TICKS(500));
     uint8_t data[1024];
     m_pSocket->receive(data, 1024, false);       // receive websocket handshake response
     data[1023] = '\0';
@@ -161,4 +161,32 @@ bool SysControl::readDeviceData(char* trustNumber, char* backendURL){
     nvs_close(hNVS);
 
     return rtnVal;
+}
+
+/**
+ * @brief xx
+ */
+void SysControl::setDeviceType(SysControl::DeviceType type){
+    m_deviceType = type;
+}
+
+/**
+ * @brief xx
+ */
+SysControl::DeviceType SysControl::getDeviceType(){
+    return m_deviceType;
+}
+
+/**
+ * @brief xx
+ */
+void SysControl::setStayAwake(bool stayAwake){
+    m_stayAwake = stayAwake;
+}
+
+/**
+ * @brief xx
+ */
+bool SysControl::getStayAwake(){
+    return m_stayAwake;
 }
