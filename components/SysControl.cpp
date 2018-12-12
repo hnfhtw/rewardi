@@ -27,6 +27,7 @@ SysControl::SysControl(){
 	m_pSocket           = new Socket();
 	m_pStandbyControl   = new StandbyControl(GPIO_NUM_33); // GPIO_NUM_33 is a RTC pin, it is used as the Button pin -> necessary to wakeup from deep sleep
 	m_pCommHandler      = nullptr;
+	m_stayAwake         = true;
 }
 
 /**
@@ -100,7 +101,13 @@ Socket* SysControl::getSocket(){
  * @brief xx
  */
 bool SysControl::connectToServer(){
-    std::string websocketHandShakeRequest = "GET /ws/boxes/";         // HN-CHECK todo: send to /ws/boxes if it is a box, send to /ws/sockets/ if it is a socket
+    std::string websocketHandShakeRequest = "GET /ws/";
+    if(getDeviceType() == SysControl::DeviceType::BOX){
+        websocketHandShakeRequest += "boxes/";
+    }
+    else if(getDeviceType() == SysControl::DeviceType::SOCKET){
+        websocketHandShakeRequest += "sockets/";
+    }
     websocketHandShakeRequest += getTrustNumber();
     websocketHandShakeRequest += " HTTP/1.1\r\nHost: ";
     websocketHandShakeRequest += getBackendURL();

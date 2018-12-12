@@ -78,6 +78,10 @@ bool CommHandler::parseMessage(const char* message){
                 m_pSocketBoard->setMaxTime(maxTime_sec);
                 ESP_LOGD(LOG_TAG, "MSG_ID_ACTIVATESOCKET received, maxTime = %d", maxTime_sec);
                 m_pSocketBoard->switchOn();     // switch on socket for maxTime
+                CommHandlerSendData_t sendData;
+                sendData.msgID = MSG_ID_ACK;
+                sendData.value1 = obj.getInt("uid");
+                addSendMessage(sendData);   // send MSG_ID_ACK to server
 		    }
 			break;
 		}

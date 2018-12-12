@@ -38,7 +38,7 @@ void app_main(void)
     Box* pBox = nullptr;
 
     if(pSysControl->getTrustNumber().c_str()[0] == '2'){          // trust number starting with 2 -> device is a SocketBoard
-        pSocketBoard = new SocketBoard(GPIO_NUM_32);
+        pSocketBoard = new SocketBoard(GPIO_NUM_4);
         pSocketBoard->init();
         pSocketBoard->setCommHandler(pCommHandler);
         pCommHandler->setSocketBoard(pSocketBoard);
