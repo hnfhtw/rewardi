@@ -177,14 +177,17 @@ private:
                             ESP_LOGD(LOG_TAG, "5 digit box code = %d", boxCode);
                         }
                         else if( (parsedCommandIndex == 2) && (parsedCommand == 131) ){  // two short presses detected -> open box if it is not locked
-                            if(m_pBoxCodeParser->getBox()->getIsLocked() == false){
+                            m_pBoxCodeParser->getBox()->setIsPendingOpenRequest(true);
+                            m_pBoxCodeParser->getBox()->updateBoxData();
+
+                            /*if(m_pBoxCodeParser->getBox()->getIsLocked() == false){
                                 m_pBoxCodeParser->getBox()->open();
                             }
                             else{
                                 m_pBoxCodeParser->getBox()->getRgbLedControl()->setColor(RgbLedControl::Color::RED);
                                 m_pBoxCodeParser->getBox()->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
                                 m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(true);
-                            }
+                            }*/
                         }
                         else{
                             if(recordNewBoxCode == false){

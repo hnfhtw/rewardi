@@ -119,10 +119,11 @@ bool CommHandler::parseMessage(const char* message){
                     CommHandlerSendData_t sendData;
                     sendData.msgID = MSG_ID_SETBOXEVENT;
                     addSendMessage(sendData);   // send MSG_ID_SETBOXEVENT to server, HN-CHECK TODO: Send it only when box was really opened!
-                    // HN-CHECK set LED to GREEN for some seconds
                 }
                 else{   // switch on not allowed
-                    // HN-CHECK set LED to RED for some seconds
+                    m_pBox->getRgbLedControl()->setColor(RgbLedControl::Color::RED);
+                    m_pBox->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+                    m_pBox->getRgbLedControl()->updateOutputValues(true);
                 }
             }
 			break;
@@ -131,10 +132,21 @@ bool CommHandler::parseMessage(const char* message){
             if(m_pBox != nullptr && m_pSocketBoard == nullptr){
                 JsonObject data = obj.getObject("data");
                 uint32_t ownerID = data.getInt("owner");
-                m_pBox->setOwner(ownerID);                  // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
+                m_pBox->setOwner(ownerID);
                 bool isLocked = data.getBoolean("isLocked");
-                m_pBox->setIsLocked(isLocked);              // HN-CHECK -> set if box is locked
+                m_pBox->setIsLocked(isLocked);
                 ESP_LOGD(LOG_TAG, "MSG_ID_GETBOXDATA_RESP received, ownerID = %d, isLocked = %d", ownerID, isLocked);
+
+                if(m_pBox->getIsPendingOpenRequest() == true){
+                    if(isLocked){
+                        m_pBox->getRgbLedControl()->setColor(RgbLedControl::Color::RED);
+                        m_pBox->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+                        m_pBox->getRgbLedControl()->updateOutputValues(true);
+                    }
+                    else{
+                        m_pBox->open();
+                    }
+                }
             }
 			break;
 		}
@@ -155,7 +167,7 @@ bool CommHandler::parseMessage(const char* message){
                 JsonObject data = obj.getObject("data");
                 uint32_t ownerID = data.getInt("owner");
                 //m_pBox->setOwner(ownerID);    // HN-CHECK -> set box owner, maybe add response to server if boxcode is already set for that user?
-                m_pBox->setIsLocked(true);    // HN-CHECK -> set if box is locked
+                m_pBox->setIsLocked(true);
                 ESP_LOGD(LOG_TAG, "MSG_ID_LOCKBOX received, ownerID = %d", ownerID);
 
                 // send ACK to server to confirm box locked

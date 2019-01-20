@@ -42,6 +42,7 @@ Box::Box(gpio_num_t lockPin, gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_
     m_isLocked          = false;
     m_hTimeout          = 0;
     m_pSysControl       = nullptr;
+    m_isPendingOpenRequest = false;
 }
 
 /**
@@ -151,6 +152,13 @@ void Box::setIsLocked(bool isLocked){
 /**
  * @brief xx
  */
+void Box::setIsPendingOpenRequest(bool isPendingOpenRequest){
+    m_isPendingOpenRequest = isPendingOpenRequest;
+}
+
+/**
+ * @brief xx
+ */
 User* Box::getOwner(){
 	return m_pOwner;
 }
@@ -186,12 +194,33 @@ bool Box::getIsLocked(){
 /**
  * @brief xx
  */
+bool Box::getIsPendingOpenRequest(){
+    return m_isPendingOpenRequest;
+}
+
+/**
+ * @brief xx
+ */
 void Box::requestBoxOpen(uint8_t boxCode){
     if(boxCode == m_pOwner->getBoxCode()){  // send open box request to server if the box code of the current user (owner) was entered
         CommHandlerSendData_t sendData;
         sendData.msgID = MSG_ID_REQUESTOPEN;
         m_pCommHandler->addSendMessage(sendData);   // send MSG_ID_REQUESTOPEN to server
     }
+    else{
+        m_pRgbLedControl->setColor(RgbLedControl::Color::RED);
+        m_pRgbLedControl->setPeriod(RgbLedControl::Period::ON);
+        m_pRgbLedControl->updateOutputValues(true);
+    }
+}
+
+/**
+ * @brief xx
+ */
+void Box::updateBoxData(){
+    CommHandlerSendData_t sendData;
+    sendData.msgID = MSG_ID_GETBOXDATA;
+    m_pCommHandler->addSendMessage(sendData);   // send MSG_ID_GETBOXDATA to server
 }
 
 /**
@@ -199,7 +228,6 @@ void Box::requestBoxOpen(uint8_t boxCode){
  */
 void Box::open(){
     m_pLockDriver->switchOn();
-    // HN-CHECK switch LED to GREEN for 5s
 }
 
 bool Box::readUserListData(){

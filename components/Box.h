@@ -35,13 +35,16 @@ public:
 	void			setOwner(uint32_t ownerID);
 	void            setCommHandler(CommHandler* pCommHandler);
     void            setIsLocked(bool isLocked);
+    void            setIsPendingOpenRequest(bool isPendingOpenRequest);
 	User*			getOwner();
 	LockDriver*     getLockDriver();
 	RgbLedControl*  getRgbLedControl();
 	BoxCodeParser*  getBoxCodeParser();
     bool            getIsLocked();
+    bool            getIsPendingOpenRequest();
     void            requestBoxOpen(uint8_t boxCode);    // called by BoxCodeParser if a valid 5 digit box code was entered
     void            open();
+    void            updateBoxData();
     void            setBoxCode(uint8_t boxCode);
     void            stayAwake();
     static void timeout(TimerHandle_t xTimer);
@@ -49,6 +52,7 @@ public:
 private:
 	User*	    	m_pOwner;
     bool            m_isLocked;
+    bool            m_isPendingOpenRequest;
 	LockDriver*     m_pLockDriver;
 	RgbLedControl*  m_pRgbLedControl;
 	BoxCodeParser*  m_pBoxCodeParser;
