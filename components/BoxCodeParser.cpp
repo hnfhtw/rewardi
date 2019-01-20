@@ -180,6 +180,11 @@ private:
                             if(m_pBoxCodeParser->getBox()->getIsLocked() == false){
                                 m_pBoxCodeParser->getBox()->open();
                             }
+                            else{
+                                m_pBoxCodeParser->getBox()->getRgbLedControl()->setColor(RgbLedControl::Color::RED);
+                                m_pBoxCodeParser->getBox()->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+                                m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(true);
+                            }
                         }
                         else{
                             if(recordNewBoxCode == false){
