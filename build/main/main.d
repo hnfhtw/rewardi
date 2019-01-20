@@ -180,7 +180,8 @@ main.o: \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/SysControl.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h \
  C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h \
- C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h \
+ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/esp-idf/components/log/include/esp_log.h:
 
@@ -543,4 +544,6 @@ C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/LockDriver.h:
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/StandbyControl.h:
 
 C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/RelaisDriver.h:
+
+C:/FHV/Code/ESP32/msys32/home/Harald.Netzer/esp/rewardi/components/messageIDs.h:
 /home/Harald.Netzer/esp/rewardi/main/./main.cpp:

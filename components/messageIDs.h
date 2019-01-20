@@ -12,6 +12,7 @@
 #define MSG_ID_ACK                          0   // server <-> box/socket
 #define MSG_ID_NACK                         1   // server <-> box/socket
 #define MSG_ID_INIT                        10   // server -> box/socket
+#define MSG_ID_PING                        99
 
 // ID 100 to 199 for box related messages
 #define MSG_ID_REQUESTOPEN_RESP           100   // server -> box

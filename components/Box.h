@@ -21,6 +21,8 @@
 class CommHandler;  // forward declaration to avoid error caused by recursive inclusion (Box.h includes CommHandler.h and vice versa)
 class BoxCodeParser;
 class SysControl;
+class LockDriver;
+
 
 #define BOX_MAX_NR_OF_USERS 5
 

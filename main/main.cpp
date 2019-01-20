@@ -8,6 +8,7 @@
 #include "LockDriver.h"
 #include "StandbyControl.h"
 #include "RelaisDriver.h"
+#include "messageIDs.h"
 
 // // device_data.bin file generieren mit trust_number aus generate_device_data.csv geht nur mit Python 2.x!!
 // 1) install esptool:  pip install esptool
@@ -71,15 +72,13 @@ void app_main(void)
     pCommHandler->start();
 
     if(pSysControl->getDeviceType() == SysControl::DeviceType::BOX){
-        // Start box
-        vTaskDelay(pdMS_TO_TICKS(2000));    // HN-CHECK DEBUG -> wait until session token is received!
-        pBox->start();          // HN-CHECK do it when server connection is established!
-        pBox->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+        while(pCommHandler->getIsConnected() == false){ }   // wait until server connection is established
+        pBox->start();
     }
 
     // stay awake until desired by SysControl, afterwards close websocket connection and enter deep sleep mode
     while(pSysControl->getStayAwake()){
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelay(pdMS_TO_TICKS(500));
     }
     pCommHandler->stop();
     pSysControl->getSocket()->close();

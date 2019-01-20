@@ -22,6 +22,7 @@ CommHandler::CommHandler(){
     m_pSocketBoard = nullptr;
     m_sessionToken = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     m_sendDataQueue = nullptr;
+    m_isConnected = false;
 }
 
 void CommHandler::setBox(Box* pBox){
@@ -48,6 +49,10 @@ Socket* CommHandler::getSocket(){
 	return m_pSocket;
 }
 
+bool CommHandler::getIsConnected(){
+    return m_isConnected;
+}
+
 /**
  * @brief xx
  */
@@ -61,6 +66,7 @@ bool CommHandler::parseMessage(const char* message){
 	        JsonObject data = obj.getObject("data");
 	        m_sessionToken = data.getString("token").c_str();
 	        ESP_LOGD(LOG_TAG, "MSG_ID_INIT received, session token = %s", m_sessionToken.c_str());
+	        m_isConnected = true;
 	        break;
 	    }
 		case MSG_ID_ACK: {
@@ -89,7 +95,12 @@ bool CommHandler::parseMessage(const char* message){
             if(m_pSocketBoard != nullptr && m_pBox == nullptr){
                 ESP_LOGD(LOG_TAG, "MSG_ID_DEACTIVATESOCKET received");
                 uint32_t duration_sec = m_pSocketBoard->switchOff(false);   // switch off socket, stop maxTime timer
+
                 CommHandlerSendData_t sendData;
+                sendData.msgID = MSG_ID_ACK;
+                sendData.value1 = obj.getInt("uid");
+                addSendMessage(sendData);   // send MSG_ID_ACK to server
+
                 sendData.msgID = MSG_ID_SETSOCKETEVENT;
                 sendData.value1 = duration_sec;
                 sendData.value2 = 0;
@@ -194,6 +205,10 @@ bool CommHandler::sendData(CommHandlerSendData_t sendData){
             ESP_LOGD(LOG_TAG, "Send MSG_ID_NACK: %s", obj.toStringUnformatted().c_str());
             break;
         }
+        case MSG_ID_PING: {
+            sendEncodedRawData("ping", WS_OPCODE_PING);
+            return true;
+        }
         case MSG_ID_REQUESTOPEN: {
             obj.setInt("type", MSG_ID_REQUESTOPEN);
             ESP_LOGD(LOG_TAG, "Send MSG_ID_REQUESTOPEN: %s", obj.toStringUnformatted().c_str());
@@ -255,7 +270,7 @@ bool CommHandler::sendEncodedRawData(char const *str, uint8_t opcode) {
     size_t bufferIndex = 0;
     size_t bytesWritten = 0;
     int size = strlen(str);
-
+    ESP_LOGD(LOG_TAG, "Send sendEncodedRawData: %s", str);
     // Opcode; final fragment
     frameBuffer[bufferIndex] = (opcode | WS_FIN);
     bufferIndex++;
@@ -307,7 +322,11 @@ bool CommHandler::receiveData(){
 
 	// print full receive buffer - DEBUG
 	m_pReceiveBuffer[511] = '\0';
-	ESP_LOGD(LOG_TAG, "received string = %s", m_pReceiveBuffer);
+	ESP_LOGD(LOG_TAG, "received string = %s", &m_pReceiveBuffer[0]);
+	ESP_LOGD(LOG_TAG, "byte0 = %d", m_pReceiveBuffer[0]);
+	ESP_LOGD(LOG_TAG, "byte1 = %d", m_pReceiveBuffer[1]);
+	ESP_LOGD(LOG_TAG, "byte2 = %d", m_pReceiveBuffer[2]);
+	ESP_LOGD(LOG_TAG, "byte3 = %d", m_pReceiveBuffer[3]);
 
 	m_pReceiveBuffer[bytesRead] = '\0';	// mark end of valid data
 
@@ -336,6 +355,7 @@ bool CommHandler::receiveData(){
  */
 bool CommHandler::closeWebsocket(){
     sendEncodedRawData("", WS_OPCODE_CLOSE);
+    m_isConnected = false;
     return true;
 }
 
@@ -400,6 +420,39 @@ private:
     } // run
 }; // CommHandlerSendTask
 
+/**
+ * @brief CommHandlerHeartbeatTask
+ */
+class CommHandlerHeartbeatTask: public Task {
+public:
+    CommHandlerHeartbeatTask(std::string name): Task(name, 16 * 1024) {
+        m_pCommHandler = nullptr;
+    };
+
+private:
+    CommHandler* m_pCommHandler; // Reference to the CommHandler
+
+    /**
+     * @brief xxx
+     */
+    void run(void* data) {
+        m_pCommHandler = (CommHandler*) data;   // The passed in data is an instance of an CommHandler.
+        CommHandlerSendData_t sendData;
+        sendData.msgID = MSG_ID_PING;
+        sendData.value1 = 0;
+        sendData.value2 = 0;
+        sendData.value3 = 0;
+        sendData.flag1 = false;
+        sendData.flag2 = false;
+
+        while (true) {   // Loop forever.
+            ESP_LOGD("CommHandlerHeartbeatTask", "Send hearbeat (ping)");
+            m_pCommHandler->addSendMessage(sendData);
+            vTaskDelay(pdMS_TO_TICKS(30000));
+        } // while
+    } // run
+}; // CommHandlerSendTask
+
 
 void CommHandler::start(){
     m_sendDataQueue = xQueueCreate(10,sizeof(CommHandlerSendData_t));
@@ -412,11 +465,14 @@ void CommHandler::start(){
 
     m_pCommHandlerReceiveTask = new CommHandlerReceiveTask("CommHandlerReceiveTask");
     m_pCommHandlerReceiveTask->start(this);
+
+    m_pCommHandlerHeartbeatTask = new CommHandlerHeartbeatTask("CommHandlerHeartbeatTask");
+    m_pCommHandlerHeartbeatTask->start(this);
 }
 
 void CommHandler::stop(){
     closeWebsocket();
     m_pCommHandlerSendTask->stop();
     m_pCommHandlerReceiveTask->stop();
+    m_pCommHandlerHeartbeatTask->stop();
 }
-

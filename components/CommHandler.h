@@ -15,6 +15,7 @@
 
 class CommHandlerReceiveTask;
 class CommHandlerSendTask;
+class CommHandlerHeartbeatTask;
 
 typedef struct _sendData_ {
     uint32_t  msgID;
@@ -41,14 +42,17 @@ public:
     bool closeWebsocket();
     void start();
     void stop();
+    bool getIsConnected();
 private:
     friend class CommHandlerReceiveTask;
     friend class CommHandlerSendTask;
+    friend class CommHandlerHeartbeatTask;
     Socket* m_pSocket;
 	Box* m_pBox;
 	SocketBoard* m_pSocketBoard;
 	uint8_t m_pReceiveBuffer[512];
 	std::string m_sessionToken;
+	bool m_isConnected;
 	QueueHandle_t m_sendDataQueue;
 	bool sendData(CommHandlerSendData_t data);
     bool sendEncodedRawData(char const *str, uint8_t opcode);
@@ -56,6 +60,7 @@ private:
     bool parseMessage(const char* message);
     CommHandlerSendTask* m_pCommHandlerSendTask;
     CommHandlerReceiveTask* m_pCommHandlerReceiveTask;
+    CommHandlerHeartbeatTask* m_pCommHandlerHeartbeatTask;
 };
 
 // WebSocket protocol constants

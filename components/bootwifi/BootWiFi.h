@@ -32,6 +32,7 @@ public:
 	void setAccessPointCredentials(std::string ssid, std::string password);
 	uint8_t boot();
 	std::string getBackendUrl();
+	void resetStoredConnectionSettings();
 };
 
 #endif /* MAIN_BOOTWIFI_H_ */

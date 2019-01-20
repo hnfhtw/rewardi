@@ -10,16 +10,19 @@
 #include <esp_log.h>
 #include "BoxCodeParser.h"
 #include "Task.h"
+#include "BootWiFi.h"
 
-#define BOXCODEPARSER_MINIMUMPRESS_DURATION_MS      100   // filter out very short presses
+#define BOXCODEPARSER_MINIMUMPRESS_DURATION_MS       50   // could be used to filter out very short presses
 #define BOXCODEPARSER_SHORTPRESS_DURATION_MS        600
 #define BOXCODEPARSER_LONGPRESS_DURATION_MS        1200
-#define BOXCODEPARSER_SHORTPAUSE_DURATION_MS       1000   // short pause between two button presses
-#define BOXCODEPARSER_LONGPAUSE_DURATION_MS        2500   // long pause between two commands
+#define BOXCODEPARSER_SHORTPAUSE_DURATION_MS        500   // 1000 short pause between two button presses
+#define BOXCODEPARSER_LONGPAUSE_DURATION_MS        2500   // 2500 long pause between two commands
 #define BOXCODEPARSER_STARTSTOPRECORD_DURATION_MS 10000   // 10s press starts (and stops) recording of a new 5-digit box code for current user
 #define BOXCODEPARSER_WIFIRESET_DURATION_MS       30000   // press button 30s to reset wifi AP data and restart ESP32
 
 static const char* LOG_TAG = "BoxCodeParser";
+
+extern BootWiFi bootWifi;
 
 /**
  * @brief Create a BoxCodeParser instance.
@@ -97,6 +100,11 @@ private:
                 enablePauseTimer = false;
                 symbolStartTick = tick;
                 parsedCommand |= (1 << 7);  // indicate that new command started
+                if(recordNewBoxCode == false){
+                    m_pBoxCodeParser->getBox()->getRgbLedControl()->setColor(RgbLedControl::Color::YELLOW);
+                    m_pBoxCodeParser->getBox()->getRgbLedControl()->setPeriod(RgbLedControl::Period::OFF);
+                    m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(false);
+                }
             }
             else if(isButtonPressed && symbolTimerRunning == true){
                 m_pBoxCodeParser->getBox()->stayAwake();        // HN-CHECK Reset 60s stay awake timer to avoid going to sleep mode while user works with box
@@ -106,7 +114,8 @@ private:
                 symbolDeltaTick = symbolEndTick - symbolStartTick;
                 symbolTimerRunning = false;
                 enablePauseTimer = true;
-
+                m_pBoxCodeParser->getBox()->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+                m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(true);
                 if( (symbolDeltaTick > BOXCODEPARSER_MINIMUMPRESS_DURATION_MS) && (symbolDeltaTick <= BOXCODEPARSER_SHORTPRESS_DURATION_MS) ){    // add a 1 to the parsed command for each short press
                     ESP_LOGD(LOG_TAG, "Short Button Press, deltaTick = %d", symbolDeltaTick);
                     parsedCommand |= (1 << parsedCommandIndex);
@@ -116,7 +125,8 @@ private:
                 }
                 else if(symbolDeltaTick > BOXCODEPARSER_WIFIRESET_DURATION_MS){ // a button press for 30s will reset wifi AP data and restart ESP32
                     ESP_LOGD(LOG_TAG, "Wifi AP data reset button press detected");
-                    // HN-CHECK Todo: Add reset here!!
+                    bootWifi.resetStoredConnectionSettings();   // reset stored SSID and password
+                    m_pBoxCodeParser->getBox()->m_pSysControl->setStayAwake(false);     // go to deep sleep mode -> another button press will reset the box
                 }
                 else if(symbolDeltaTick > BOXCODEPARSER_STARTSTOPRECORD_DURATION_MS){   // a button press for 10s will start / stop box code recording for current user
                     if(recordNewBoxCode == true){
@@ -130,14 +140,19 @@ private:
                             pauseTimerRunning = false;
                             enablePauseTimer = false;
                         }
-
+                        m_pBoxCodeParser->getBox()->getRgbLedControl()->setColor(RgbLedControl::Color::YELLOW);
+                        m_pBoxCodeParser->getBox()->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+                        m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(true);
                         recordNewBoxCode = false;
                     }
                     else{
                         recordNewBoxCode = true;
+                        m_pBoxCodeParser->getBox()->getRgbLedControl()->setColor(RgbLedControl::Color::BLUE);
+                        m_pBoxCodeParser->getBox()->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+                        m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(true);
                     }
                 }
-                else if(symbolDeltaTick > BOXCODEPARSER_LONGPRESS_DURATION_MS){     // add a 0 to the parsed command for each long press
+                else if(symbolDeltaTick > BOXCODEPARSER_SHORTPRESS_DURATION_MS){     // original: BOXCODEPARSER_LONGPRESS_DURATION_MS  add a 0 to the parsed command for each long press
                     ESP_LOGD(LOG_TAG, "Long Button Press, deltaTick = %d", symbolDeltaTick);
                     if(parsedCommandIndex < 7){
                         ++parsedCommandIndex;
@@ -157,7 +172,6 @@ private:
                         ESP_LOGD(LOG_TAG, "Parsed command = %d, command lenght = %d", parsedCommand, parsedCommandIndex);
                         // Evaluate parsedCommand here!!
                         if( (parsedCommandIndex == 5) && (parsedCommand <= 159) && (parsedCommand >= 128) ){   // a 5 digit box code is detected
-                            // HN-CHECK Todo -> inform box that a 5 digit box code was entered
                             uint8_t boxCode = parsedCommand & ~(1<<7);
                             m_pBoxCodeParser->getBox()->requestBoxOpen(boxCode);
                             ESP_LOGD(LOG_TAG, "5 digit box code = %d", boxCode);
@@ -165,6 +179,13 @@ private:
                         else if( (parsedCommandIndex == 2) && (parsedCommand == 131) ){  // two short presses detected -> open box if it is not locked
                             if(m_pBoxCodeParser->getBox()->getIsLocked() == false){
                                 m_pBoxCodeParser->getBox()->open();
+                            }
+                        }
+                        else{
+                            if(recordNewBoxCode == false){
+                                m_pBoxCodeParser->getBox()->getRgbLedControl()->setColor(RgbLedControl::Color::RED);
+                                m_pBoxCodeParser->getBox()->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+                                m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(true);
                             }
                         }
                         parsedCommandIndex = 0;

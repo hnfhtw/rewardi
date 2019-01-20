@@ -34,8 +34,8 @@ static std::map<void*, Box*> boxMap;
  */
 Box::Box(gpio_num_t lockPin, gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_num_t ledBluePin, gpio_num_t buttonPin){
 	m_pOwner			= nullptr;
-    m_pLockDriver       = new LockDriver(lockPin);
     m_pRgbLedControl    = new RgbLedControl(ledRedPin, ledGreenPin, ledBluePin);
+    m_pLockDriver       = new LockDriver(lockPin, this);
     m_pBoxCodeParser    = new BoxCodeParser(buttonPin, this);
     m_pCommHandler      = nullptr;
     m_userListSize      = 0;
@@ -65,6 +65,7 @@ void Box::init(){
 
     m_pRgbLedControl->setColor(RgbLedControl::Color::WHITE);
     m_pRgbLedControl->setPeriod(RgbLedControl::Period::MS_1000);
+    m_pRgbLedControl->updateOutputValues(true);
     m_pRgbLedControl->start();
 }
 
@@ -80,6 +81,10 @@ void Box::start(){
     m_pBoxCodeParser->start();  // start box code parser
 
     xTimerStart(m_hTimeout, 0);   // start awake timeout timer
+
+    m_pRgbLedControl->setColor(RgbLedControl::Color::YELLOW);
+    m_pRgbLedControl->setPeriod(RgbLedControl::Period::ON);
+    m_pRgbLedControl->updateOutputValues(true);
 }
 
 

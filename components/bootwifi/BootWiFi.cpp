@@ -412,3 +412,11 @@ BootWiFi::BootWiFi() {
 std::string BootWiFi::getBackendUrl(){
 	return m_backendUrl;
 }
+
+void BootWiFi::resetStoredConnectionSettings(){
+    connection_info_t connectionInfo;
+    copyData((uint8_t*)connectionInfo.ssid, SSID_SIZE, "");
+    copyData((uint8_t*)connectionInfo.password, PASSWORD_SIZE, "");
+    saveConnectionInfo(&connectionInfo);
+
+}

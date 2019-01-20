@@ -11,10 +11,13 @@
 #include <FreeRTOS.h>
 #include <driver/gpio.h>
 #include <freertos/timers.h>
+#include "Box.h"
+
+class Box;
 
 class LockDriver {
 public:
-    LockDriver(gpio_num_t lockPin);
+    LockDriver(gpio_num_t lockPin, Box* pBox);
     ~LockDriver();
     void setPin(gpio_num_t lockPin);
     gpio_num_t getPin();
@@ -25,6 +28,8 @@ public:
 private:
     gpio_num_t      m_lockPin;
     TimerHandle_t   m_hTimeout;
+    Box*            m_pBox;
+
 };
 
 #endif /* COMPONENTS_LOCKDRIVER_H_ */

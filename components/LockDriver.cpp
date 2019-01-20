@@ -19,9 +19,10 @@ static std::map<void*, LockDriver*> lockDriverMap;
 /**
  * @brief xxx
  */
-LockDriver::LockDriver(gpio_num_t lockPin){
+LockDriver::LockDriver(gpio_num_t lockPin, Box* pBox){
     m_lockPin = lockPin;
     m_hTimeout = nullptr;
+    m_pBox = pBox;
 }
 
 LockDriver::~LockDriver(){
@@ -66,8 +67,11 @@ void LockDriver::init(){
  */
 void LockDriver::switchOn(){
     ESP_LOGD(LOG_TAG, "switchOn");
-    xTimerStart(m_hTimeout, 0);   // start 10s timeout timer
+    xTimerStart(m_hTimeout, 0);   // start 5s timeout timer
     gpio_set_level(m_lockPin, 1);
+    m_pBox->getRgbLedControl()->setColor(RgbLedControl::Color::GREEN);
+    m_pBox->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+    m_pBox->getRgbLedControl()->updateOutputValues(true);
 }
 
 /**
@@ -76,6 +80,9 @@ void LockDriver::switchOn(){
 void LockDriver::switchOff(){
     ESP_LOGD(LOG_TAG, "switchOff, m_lockPin = %d", m_lockPin);
     gpio_set_level(m_lockPin, 0);
+    m_pBox->getRgbLedControl()->setColor(RgbLedControl::Color::YELLOW);
+    m_pBox->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
+    m_pBox->getRgbLedControl()->updateOutputValues(true);
 }
 
 /**
