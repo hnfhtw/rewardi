@@ -1,9 +1,13 @@
-/*
- * SysControl.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 16.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 16.11.2018
- *      Author: HN
- */
+ * File       : SysControl.cpp
+ * Purpose    : Manages behavior (e.g. connect to Rewardi server)
+ *              and data that is common to both Rewardi Box and SocketBoard
+ ********************************************************************************************/
 
 #include <esp_log.h>
 #include "nvs_flash.h"
@@ -19,19 +23,20 @@
 static const char* LOG_TAG = "SysControl";
 
 /**
- * @brief Create a SysControl instance.
+ * @brief SysControl constructor
  */
 SysControl::SysControl(){
 	m_backendURL  		= "";
 	m_trustNumber		= "1234ABCD";
 	m_pSocket           = new Socket();
-	m_pStandbyControl   = new StandbyControl(GPIO_NUM_33); // GPIO_NUM_33 is a RTC pin, it is used as the Button pin -> necessary to wakeup from deep sleep
+	m_pStandbyControl   = new StandbyControl(GPIO_NUM_33); // GPIO_NUM_33 is a RTC pin, it is used as the Button pin -> necessary to wakeup from deep sleep (note: this pin is not connected in case of a SocketBoard)
 	m_pCommHandler      = nullptr;
 	m_stayAwake         = true;
+	m_deviceType        = SysControl::DeviceType::SOCKET;   // init to SOCKET here -> but will be set later anyway!
 }
 
 /**
- * @brief xx
+ * @brief Initialize SysControl - init StandbyControl and get device data (trust number and backend URL) from Flash
  */
 void SysControl::init(){
     m_pStandbyControl->init();
@@ -49,56 +54,56 @@ void SysControl::init(){
 }
 
 /**
- * @brief xx
+ * @brief Set backend URL
  */
 void SysControl::setBackendURL(std::string backendURL){
 	m_backendURL = backendURL;		// use string copy function??
 }
 
 /**
- * @brief xx
+ * @brief Set trust number
  */
 void SysControl::setTrustNumber(std::string trustNumber){
     m_trustNumber = trustNumber;
 }
 
 /**
- * @brief xx
+ * @brief Set pointer to CommHandler
  */
 void SysControl::setCommHandler(CommHandler* pCommHandler){
     m_pCommHandler = pCommHandler;
 }
 
 /**
- * @brief xx
+ * @brief Get backend URL
  */
 std::string SysControl::getBackendURL(){
 	return m_backendURL;
 }
 
 /**
- * @brief xx
+ * @brief Get trust number
  */
 std::string SysControl::getTrustNumber(){
 	return m_trustNumber;
 }
 
 /**
- * @brief xx
+ * @brief Get pointer to CommHandler
  */
 CommHandler* SysControl::getCommHandler(){
     return m_pCommHandler;
 }
 
 /**
- * @brief xx
+ * @brief Get pointer to TCP socket
  */
 Socket* SysControl::getSocket(){
     return m_pSocket;
 }
 
 /**
- * @brief xx
+ * @brief Connect to Rewardi server -> connect using SSL -> send Websocket handshake request (including the unique trust number to authenticate)
  */
 bool SysControl::connectToServer(){
     std::string websocketHandShakeRequest = "GET /ws/";
@@ -129,12 +134,15 @@ bool SysControl::connectToServer(){
 }
 
 /**
- * @brief xx
+ * @brief Enter deep sleep mode
  */
 void SysControl::enterDeepSleepMode(){
     m_pStandbyControl->enterSleepMode();
 }
 
+/**
+ * @brief Read device data from flash (trust number and backend URL)
+ */
 bool SysControl::readDeviceData(char* trustNumber, char* backendURL){
     bool rtnVal = false;
 
@@ -171,28 +179,28 @@ bool SysControl::readDeviceData(char* trustNumber, char* backendURL){
 }
 
 /**
- * @brief xx
+ * @brief Set the device type (tell SysControl if the device is a Box or a SocketBoard)
  */
 void SysControl::setDeviceType(SysControl::DeviceType type){
     m_deviceType = type;
 }
 
 /**
- * @brief xx
+ * @brief Get device type
  */
 SysControl::DeviceType SysControl::getDeviceType(){
     return m_deviceType;
 }
 
 /**
- * @brief xx
+ * @brief Set flag that avoids entering deep sleep mode (see main loop)
  */
 void SysControl::setStayAwake(bool stayAwake){
     m_stayAwake = stayAwake;
 }
 
 /**
- * @brief xx
+ * @brief Get flag that avoids entering deep sleep mode
  */
 bool SysControl::getStayAwake(){
     return m_stayAwake;

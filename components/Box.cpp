@@ -1,9 +1,12 @@
-/*
- * Box.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 22.10.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 22.10.2018
- *      Author: HN
- */
+ * File       : Box.cpp
+ * Purpose    : Represents a Rewardi Box
+ ********************************************************************************************/
 
 #include <esp_log.h>
 #include <map>
@@ -34,9 +37,9 @@ static std::map<void*, Box*> boxMap;
  */
 Box::Box(gpio_num_t lockPin, gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_num_t ledBluePin, gpio_num_t buttonPin){
 	m_pOwner			= nullptr;
-    m_pRgbLedControl    = new RgbLedControl(ledRedPin, ledGreenPin, ledBluePin);
-    m_pLockDriver       = new LockDriver(lockPin, this);
-    m_pBoxCodeParser    = new BoxCodeParser(buttonPin, this);
+    m_pRgbLedControl    = new RgbLedControl(ledRedPin, ledGreenPin, ledBluePin);    // create a RgbLedControl object that controls the RGB LED
+    m_pLockDriver       = new LockDriver(lockPin, this);                            // create a LockDriver object that controls the lock
+    m_pBoxCodeParser    = new BoxCodeParser(buttonPin, this);                       // create a BoxCodeParser object that parses user inputs on the push button
     m_pCommHandler      = nullptr;
     m_userListSize      = 0;
     m_isLocked          = false;
@@ -46,7 +49,7 @@ Box::Box(gpio_num_t lockPin, gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_
 }
 
 /**
- * @brief xx
+ * @brief Box destructor
  */
 Box::~Box(){
     ::xTimerDelete(m_hTimeout, portMAX_DELAY);
@@ -54,7 +57,7 @@ Box::~Box(){
 }
 
 /**
- * @brief xx
+ * @brief Initialize Box
  */
 void Box::init(){
     m_pLockDriver->init();
@@ -72,7 +75,7 @@ void Box::init(){
 
 
 /**
- * @brief xx
+ * @brief Start Box (called when server connection was established successfully)
  */
 void Box::start(){
     CommHandlerSendData_t sendData;         // obtain box owner and isLocked status at startup
@@ -90,7 +93,7 @@ void Box::start(){
 
 
 /**
- * @brief xx
+ * @brief Set the current Box owner (ownerID is received from server)
  */
 void Box::setOwner(uint32_t ownerID){
     if(ownerID == m_userList[0]->getUserID()){
@@ -136,70 +139,70 @@ void Box::setOwner(uint32_t ownerID){
 }
 
 /**
- * @brief xx
+ * @brief Set pointer to CommHandler object
  */
 void Box::setCommHandler(CommHandler* pCommHandler){
     m_pCommHandler = pCommHandler;
 }
 
 /**
- * @brief xx
+ * @brief Set lock information
  */
 void Box::setIsLocked(bool isLocked){
     m_isLocked = isLocked;
 }
 
 /**
- * @brief xx
+ * @brief Set flag that indicates if a open request was sent to the server and a response is not yet received
  */
 void Box::setIsPendingOpenRequest(bool isPendingOpenRequest){
     m_isPendingOpenRequest = isPendingOpenRequest;
 }
 
 /**
- * @brief xx
+ * @brief Get current Box owner
  */
 User* Box::getOwner(){
 	return m_pOwner;
 }
 
 /**
- * @brief xx
+ * @brief Get pointer to Box LockDriver object
  */
 LockDriver* Box::getLockDriver(){
     return m_pLockDriver;
 }
 
 /**
- * @brief xx
+ * @brief Get pointer to Box RgbLedControl object
  */
 RgbLedControl* Box::getRgbLedControl(){
     return m_pRgbLedControl;
 }
 
 /**
- * @brief xx
+ * @brief Get pointer to Box BoxCodeParser object
  */
 BoxCodeParser* Box::getBoxCodeParser(){
     return m_pBoxCodeParser;
 }
 
 /**
- * @brief xx
+ * @brief Get Box lock status
  */
 bool Box::getIsLocked(){
     return m_isLocked;
 }
 
 /**
- * @brief xx
+ * @brief Check if a pending Box open request is active (-> answer from server not yet received)
  */
 bool Box::getIsPendingOpenRequest(){
     return m_isPendingOpenRequest;
 }
 
 /**
- * @brief xx
+ * @brief Called from BoxCodeParser if a code was entered by the user with the push button -> send open request to server if correct box code was entered
  */
 void Box::requestBoxOpen(uint8_t boxCode){
     if(boxCode == m_pOwner->getBoxCode()){  // send open box request to server if the box code of the current user (owner) was entered
@@ -215,7 +218,7 @@ void Box::requestBoxOpen(uint8_t boxCode){
 }
 
 /**
- * @brief xx
+ * @brief Sends a request to the server to update box data
  */
 void Box::updateBoxData(){
     CommHandlerSendData_t sendData;
@@ -224,12 +227,15 @@ void Box::updateBoxData(){
 }
 
 /**
- * @brief xx
+ * @brief Open the box -> user then has 5s time to open the Box, afterwards the LockDriver will turn-off the lock again (to avoid overheating)
  */
 void Box::open(){
     m_pLockDriver->switchOn();
 }
 
+/**
+ * @brief Read the last 5 users and their 5-digit box codes from Flash
+ */
 bool Box::readUserListData(){
     bool rtnVal = false;
 
@@ -326,6 +332,9 @@ bool Box::readUserListData(){
     return rtnVal;
 }
 
+/**
+ * @brief Write the last 5 users and their 5-digit box codes from Flash
+ */
 bool Box::writeUserListData(){
     bool rtnVal = false;
 
@@ -403,7 +412,7 @@ bool Box::writeUserListData(){
 }
 
 /**
- * @brief xx
+ * @brief Called from BoxCodeParser if the user has entered a new 5-digit box code
  */
 void Box::setBoxCode(uint8_t boxCode){
     ESP_LOGD(LOG_TAG, "New boxCode set = %d", boxCode);
@@ -413,7 +422,7 @@ void Box::setBoxCode(uint8_t boxCode){
 }
 
 /**
- * @brief xxx
+ * @brief Sleep mode timer -> when it expires this method is called and the flag that avoids entering deep sleep mode is reset
  */
 void Box::timeout(TimerHandle_t xTimer){
     Box* pBox =boxMap.at(xTimer);
@@ -422,7 +431,7 @@ void Box::timeout(TimerHandle_t xTimer){
 
 
 /**
- * @brief xxx
+ * @brief Avoid entering deep sleep mode by this method -> it resets the 60s "stay awake timer" -> called on every push button press
  */
 void Box::stayAwake(){
     xTimerReset(m_hTimeout, 0);   // reset awake timeout timer

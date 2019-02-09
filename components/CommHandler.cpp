@@ -1,9 +1,12 @@
-/*
- * CommHandler.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 03.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 03.11.2018
- *      Author: HN
- */
+ * File       : CommHandler.cpp
+ * Purpose    : Responsible for Websocket communication with Rewardi Server
+ ********************************************************************************************/
 
 #include <esp_log.h>
 #include "CommHandler.h"
@@ -14,7 +17,7 @@
 static const char* LOG_TAG = "CommHandler";
 
 /**
- * @brief Create a CommHandler instance.
+ * @brief CommHandler constructor
  */
 CommHandler::CommHandler(){
     m_pSocket = nullptr;
@@ -23,38 +26,62 @@ CommHandler::CommHandler(){
     m_sessionToken = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     m_sendDataQueue = nullptr;
     m_isConnected = false;
+    m_pCommHandlerSendTask = nullptr;
+    m_pCommHandlerReceiveTask = nullptr;
+    m_pCommHandlerHeartbeatTask = nullptr;
 }
 
+/**
+ * @brief Set pointer to Box object
+ */
 void CommHandler::setBox(Box* pBox){
 	m_pBox = pBox;
 }
 
+/**
+ * @brief Get pointer to Box object
+ */
 Box* CommHandler::getBox(){
 	return m_pBox;
 }
 
+/**
+ * @brief Set pointer to SocketBoard object
+ */
 void CommHandler::setSocketBoard(SocketBoard* pSocketBoard){
     m_pSocketBoard = pSocketBoard;
 }
 
+/**
+ * @brief Get pointer to SocketBoard object
+ */
 SocketBoard* CommHandler::getSocketBoard(){
     return m_pSocketBoard;
 }
 
+/**
+ * @brief Set pointer to TCP socket
+ */
 void CommHandler::setSocket(Socket* pSocket){
 	m_pSocket = pSocket;
 }
 
+/**
+ * @brief Get pointer to TCP socket
+ */
 Socket* CommHandler::getSocket(){
 	return m_pSocket;
 }
 
+/**
+ * @brief Get flag that indicates if Websocket communcation to server is established
+ */
 bool CommHandler::getIsConnected(){
     return m_isConnected;
 }
 
 /**
- * @brief xx
+ * @brief Parse a message received from the Rewardi server
  */
 bool CommHandler::parseMessage(const char* message){
 	JsonObject obj = JSON::parseObject(message);
@@ -188,9 +215,8 @@ bool CommHandler::parseMessage(const char* message){
 	return true;
 }
 
-
 /**
- * @brief xx
+ * @brief Send a message to the Rewardi server
  */
 bool CommHandler::sendData(CommHandlerSendData_t sendData){
 
@@ -258,20 +284,18 @@ bool CommHandler::sendData(CommHandlerSendData_t sendData){
     return true;
 }
 
-
 /**
- * @brief xx
+ * @brief Add a message that is to be sent to the Rewardi server to the message queue
  */
 bool CommHandler::addSendMessage(CommHandlerSendData_t sendData){
-    if(xQueueSend(m_sendDataQueue,(void *)&sendData,(TickType_t )0)){       // HN-CHECK todo: check if sendData is valid!?
+    if(xQueueSend(m_sendDataQueue,(void *)&sendData,(TickType_t )0)){       // todo: check if sendData is valid!
         return true;
     }
     return false;
 }
 
-
 /**
- * @brief xx
+ * @brief Encodes the message data to Websocket protocol format and sends it to Rewardi server
  */
 bool CommHandler::sendEncodedRawData(char const *str, uint8_t opcode) {
 	if(m_pSocket == NULL){
@@ -310,7 +334,7 @@ bool CommHandler::sendEncodedRawData(char const *str, uint8_t opcode) {
     bufferIndex += 4;
 
     for (int i=0; i<size; ++i) {
-        frameBuffer[bufferIndex] = (str[i] ^ mask[i % 4]);
+        frameBuffer[bufferIndex] = (str[i] ^ mask[i % 4]);  // payload in messages sent from client to server need to be masked according to Websocket specification
         bufferIndex++;
         if (bufferIndex == 512) {
             bytesWritten += m_pSocket->send(frameBuffer, bufferIndex);
@@ -324,7 +348,7 @@ bool CommHandler::sendEncodedRawData(char const *str, uint8_t opcode) {
 }
 
 /**
- * @brief xx
+ * @brief Extract message payload from a received message in Websocket protocol format
  */
 bool CommHandler::receiveData(){
 	uint32_t bytesRead = 0;
@@ -363,7 +387,7 @@ bool CommHandler::receiveData(){
 }
 
 /**
- * @brief xx
+ * @brief Send Websocket close information to Rewardi server
  */
 bool CommHandler::closeWebsocket(){
     sendEncodedRawData("", WS_OPCODE_CLOSE);
@@ -371,9 +395,8 @@ bool CommHandler::closeWebsocket(){
     return true;
 }
 
-
 /**
- * @brief CommHandlerReceiveTask
+ * @brief CommHandlerReceiveTask - used to receive messages from Rewardi server
  */
 class CommHandlerReceiveTask: public Task {
 public:
@@ -385,21 +408,19 @@ private:
     CommHandler* m_pCommHandler; // Reference to the CommHandler
 
     /**
-     * @brief xxx
+     * @brief Check for new data received from Rewardi server
      */
     void run(void* data) {
         m_pCommHandler = (CommHandler*) data;   // The passed in data is an instance of an CommHandler.
 
         while (true) {   // Loop forever.
-            //ESP_LOGD("CommHandlerReceiveTask", "Waiting for new input data");
             m_pCommHandler->receiveData();
         } // while
     } // run
 }; // CommHandlerReceiveTask
 
-
 /**
- * @brief CommHandlerSendTask
+ * @brief CommHandlerSendTask - used to send messages to Rewardi server
  */
 class CommHandlerSendTask: public Task {
 public:
@@ -411,7 +432,7 @@ private:
     CommHandler* m_pCommHandler; // Reference to the CommHandler
 
     /**
-     * @brief xxx
+     * @brief Check if new data to send to Rewardi server is added to the message queue -> then send it
      */
     void run(void* data) {
         m_pCommHandler = (CommHandler*) data;   // The passed in data is an instance of an CommHandler.
@@ -424,7 +445,6 @@ private:
         sendData.flag2 = false;
 
         while (true) {   // Loop forever.
-            //ESP_LOGD("CommHandlerSendTask", "Waiting for data to send");
             if(xQueueReceive(m_pCommHandler->m_sendDataQueue,&sendData,pdMS_TO_TICKS(1000))){
                 m_pCommHandler->sendData(sendData);  // send out data if there is something added to the queue
             }
@@ -433,7 +453,7 @@ private:
 }; // CommHandlerSendTask
 
 /**
- * @brief CommHandlerHeartbeatTask
+ * @brief CommHandlerHeartbeatTask - used to keep Websocket connection alive (ping/pong mechanism as specified in the Websocket specification)
  */
 class CommHandlerHeartbeatTask: public Task {
 public:
@@ -445,7 +465,7 @@ private:
     CommHandler* m_pCommHandler; // Reference to the CommHandler
 
     /**
-     * @brief xxx
+     * @brief Send a Websocket ping packet to the Rewardi server every 30s
      */
     void run(void* data) {
         m_pCommHandler = (CommHandler*) data;   // The passed in data is an instance of an CommHandler.
@@ -465,7 +485,10 @@ private:
     } // run
 }; // CommHandlerSendTask
 
-
+/**
+ * @brief Start the CommHandler -> create the message queue for outgoing messages and then start the three
+ *        communication tasks (one to send data, one to receive data and one to keep the connection alive)
+ */
 void CommHandler::start(){
     m_sendDataQueue = xQueueCreate(10,sizeof(CommHandlerSendData_t));
     if(!m_sendDataQueue){
@@ -482,6 +505,9 @@ void CommHandler::start(){
     m_pCommHandlerHeartbeatTask->start(this);
 }
 
+/**
+ * @brief Stop the CommHandler -> close the Websocket connection and stop the three communication tasks
+ */
 void CommHandler::stop(){
     closeWebsocket();
     m_pCommHandlerSendTask->stop();

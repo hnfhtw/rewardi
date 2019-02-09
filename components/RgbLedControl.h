@@ -1,9 +1,12 @@
-/*
- * RgbLedControl.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : RgbLedControl.h
+ * Purpose    : Driver to control the RGB LED of a Rewardi Box
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_RGBLEDCONTROL_H_
 #define COMPONENTS_RGBLEDCONTROL_H_

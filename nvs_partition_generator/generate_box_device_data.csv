@@ -1,0 +1,14 @@
+key,type,encoding,value
+device_data,namespace,,
+trust_number,data,string,1052A7FC-B9EF-4815-9B2F-1479A6E9DE81
+backend_url,data,string,37.60.168.102
+user0_id,data,u32,0
+user0_boxcode,data,u8,0
+user1_id,data,u32,0
+user1_boxcode,data,u8,0
+user2_id,data,u32,0
+user2_boxcode,data,u8,0
+user3_id,data,u32,0
+user3_boxcode,data,u8,0
+user4_id,data,u32,0
+user4_boxcode,data,u8,0

@@ -1,23 +1,25 @@
-/*
- * RgbLedControl.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : RgbLedControl.cpp
+ * Purpose    : Driver to control the RGB LED of a Rewardi Box
+ ********************************************************************************************/
 
 #include <map>
 #include "RgbLedControl.h"
 
-
 static std::map<void*, RgbLedControl*> rgbLedControlMap;
 
 /**
- * @brief xxx
+ * @brief RgbLedControl constructor - needs the three pins where the red, green and blue LEDs are connected
  */
 RgbLedControl::RgbLedControl(gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_num_t ledBluePin){
-    m_pLedRed = new LedDriver(ledRedPin);
-    m_pLedGreen = new LedDriver(ledGreenPin);
-    m_pLedBlue = new LedDriver(ledBluePin);
+    m_pLedRed = new LedDriver(ledRedPin);       // create LedDriver object for red LED
+    m_pLedGreen = new LedDriver(ledGreenPin);   // create LedDriver object for green LED
+    m_pLedBlue = new LedDriver(ledBluePin);     // create LedDriver object for blue LED
     m_hBlinkTimer = nullptr;
     m_period = OFF;
     m_color = RgbLedControl::Color::WHITE;
@@ -25,7 +27,7 @@ RgbLedControl::RgbLedControl(gpio_num_t ledRedPin, gpio_num_t ledGreenPin, gpio_
 }
 
 /**
- * @brief xx
+ * @brief Destructor
  */
 RgbLedControl::~RgbLedControl(){
     ::xTimerDelete(m_hBlinkTimer, portMAX_DELAY);
@@ -33,7 +35,8 @@ RgbLedControl::~RgbLedControl(){
 }
 
 /**
- * @brief xxx
+ * @brief Initialize RgbLedControl -> init the three LedDrivers and create a timer that will be used to blink the LED
+ *        Map the RgbLedControl object with this timer
  */
 void RgbLedControl::init(){
     m_pLedRed->init();
@@ -43,48 +46,44 @@ void RgbLedControl::init(){
     rgbLedControlMap.insert(std::make_pair(m_hBlinkTimer, this));
 }
 
-
 /**
- * @brief xx
+ * @brief Start the blink timer
  */
 void RgbLedControl::start(){
     xTimerStart(m_hBlinkTimer, 0);   // start LED blink timer
 }
 
-
 /**
- * @brief xxx
+ * @brief Set RGB LED color
  */
 void RgbLedControl::setColor(RgbLedControl::Color color){
     m_color = color;
 }
 
-
 /**
- * @brief xxx
+ * @brief Set RGB LED blinking period
  */
 void RgbLedControl::setPeriod(RgbLedControl::Period period){
     m_period = period;
 }
 
-
 /**
- * @brief xxx
+ * @brief Get RGB LED color
  */
 RgbLedControl::Color RgbLedControl::getColor(){
     return m_color;
 }
 
-
 /**
- * @brief xxx
+ * @brief Get RGB LED blinking period
  */
 RgbLedControl::Period RgbLedControl::getPeriod(){
     return m_period;
 }
 
-
-
+/**
+ * @brief Update the output pin values for the three LEDs
+ */
 void RgbLedControl::updateOutputValues(bool isOutputOn){
     if(isOutputOn == false){
         m_pLedRed->switchOff();
@@ -145,9 +144,8 @@ void RgbLedControl::updateOutputValues(bool isOutputOn){
         }
 }
 
-
 /**
- * @brief xxx
+ * @brief Called each 500ms by the blinking timer -> used to blink the LED if desired
  */
 void RgbLedControl::timeout(TimerHandle_t xTimer){
     RgbLedControl* pRgbControl =rgbLedControlMap.at(xTimer);

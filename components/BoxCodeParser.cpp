@@ -1,10 +1,12 @@
-/*
- * BoxCodeParser.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 29.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 29.11.2018
- *      Author: HN
- */
-
+ * File       : BoxCodeParser.cpp
+ * Purpose    : Each Rewardi Box has a BoxCodeParser that parses user inputs on the push button
+ ********************************************************************************************/
 
 #include <string>
 #include <esp_log.h>
@@ -14,7 +16,6 @@
 
 #define BOXCODEPARSER_MINIMUMPRESS_DURATION_MS       50   // could be used to filter out very short presses
 #define BOXCODEPARSER_SHORTPRESS_DURATION_MS        600
-#define BOXCODEPARSER_LONGPRESS_DURATION_MS        1200
 #define BOXCODEPARSER_SHORTPAUSE_DURATION_MS        500   // 1000 short pause between two button presses
 #define BOXCODEPARSER_LONGPAUSE_DURATION_MS        2500   // 2500 long pause between two commands
 #define BOXCODEPARSER_STARTSTOPRECORD_DURATION_MS 10000   // 10s press starts (and stops) recording of a new 5-digit box code for current user
@@ -28,13 +29,13 @@ extern BootWiFi bootWifi;
  * @brief Create a BoxCodeParser instance.
  */
 BoxCodeParser::BoxCodeParser(gpio_num_t buttonPin, Box* pBox){
-    m_pButtonDriver = new ButtonDriver(buttonPin);
+    m_pButtonDriver = new ButtonDriver(buttonPin);  // create a ButtonDriver object that is used to access the user input information (button pressed or not)
     m_pBox = pBox;
 }
 
 
 /**
- * @brief xxx
+ * @brief Initialize BoxCodeParser
  */
 void BoxCodeParser::init(){
     m_pButtonDriver->init();
@@ -42,7 +43,7 @@ void BoxCodeParser::init(){
 
 
 /**
- * @brief xxx
+ * @brief Get pointer to the ButtonDriver object
  */
 ButtonDriver* BoxCodeParser::getButtonDriver(){
     return m_pButtonDriver;
@@ -50,14 +51,14 @@ ButtonDriver* BoxCodeParser::getButtonDriver(){
 
 
 /**
- * @brief xxx
+ * @brief Get pointer to the Box object
  */
 Box* BoxCodeParser::getBox(){
     return m_pBox;
 }
 
 /**
- * @brief BoxCodeParserTask
+ * @brief BoxCodeParserTask - will sample the push button input at a rate of 50ms
  */
 class BoxCodeParserTask: public Task {
 public:
@@ -89,7 +90,7 @@ private:
 
         bool recordNewBoxCode = false;
 
-        while (true) {   // Loop forever.
+        while (true) {   // Loop forever and parse user input in this loop
             isButtonPressed = !(m_pBoxCodeParser->getButtonDriver()->getLevel());
 
             // evaluate button press
@@ -107,7 +108,7 @@ private:
                 }
             }
             else if(isButtonPressed && symbolTimerRunning == true){
-                m_pBoxCodeParser->getBox()->stayAwake();        // HN-CHECK Reset 60s stay awake timer to avoid going to sleep mode while user works with box
+                m_pBoxCodeParser->getBox()->stayAwake();    // Reset 60s stay awake timer to avoid going to sleep mode while user works with box
             }
             else if(symbolTimerRunning == true){
                 symbolEndTick = tick;
@@ -152,7 +153,7 @@ private:
                         m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(true);
                     }
                 }
-                else if(symbolDeltaTick > BOXCODEPARSER_SHORTPRESS_DURATION_MS){     // original: BOXCODEPARSER_LONGPRESS_DURATION_MS  add a 0 to the parsed command for each long press
+                else if(symbolDeltaTick > BOXCODEPARSER_SHORTPRESS_DURATION_MS){     // add a 0 to the parsed command for each long press
                     ESP_LOGD(LOG_TAG, "Long Button Press, deltaTick = %d", symbolDeltaTick);
                     if(parsedCommandIndex < 7){
                         ++parsedCommandIndex;
@@ -179,15 +180,6 @@ private:
                         else if( (parsedCommandIndex == 2) && (parsedCommand == 131) ){  // two short presses detected -> open box if it is not locked
                             m_pBoxCodeParser->getBox()->setIsPendingOpenRequest(true);
                             m_pBoxCodeParser->getBox()->updateBoxData();
-
-                            /*if(m_pBoxCodeParser->getBox()->getIsLocked() == false){
-                                m_pBoxCodeParser->getBox()->open();
-                            }
-                            else{
-                                m_pBoxCodeParser->getBox()->getRgbLedControl()->setColor(RgbLedControl::Color::RED);
-                                m_pBoxCodeParser->getBox()->getRgbLedControl()->setPeriod(RgbLedControl::Period::ON);
-                                m_pBoxCodeParser->getBox()->getRgbLedControl()->updateOutputValues(true);
-                            }*/
                         }
                         else{
                             if(recordNewBoxCode == false){
@@ -211,7 +203,7 @@ private:
 }; // BoxCodeParserTask
 
 /**
- * @brief xxx
+ * @brief Start the BoxCodeParser task
  */
 void BoxCodeParser::start(){
     BoxCodeParserTask* pBoxCodeParserTask = new BoxCodeParserTask("BoxCodeParserTask");

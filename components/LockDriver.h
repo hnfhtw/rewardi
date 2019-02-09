@@ -1,9 +1,12 @@
-/*
- * LockDriver.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : LedDriver.h
+ * Purpose    : Driver for to switch the electromagnetic lock of the Rewardi Box
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_LOCKDRIVER_H_
 #define COMPONENTS_LOCKDRIVER_H_

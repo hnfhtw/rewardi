@@ -1,35 +1,38 @@
-/*
- * LedDriver.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : LedDriver.cpp
+ * Purpose    : Driver to switch an LED (three of these drivers are used for the RGB LED of the Rewardi Box)
+ ********************************************************************************************/
 
 #include "LedDriver.h"
 
 /**
- * @brief xxx
+ * @brief LedDriver constructor - needs pin number where LED is connected
  */
 LedDriver::LedDriver(gpio_num_t ledPin){
     m_ledPin = ledPin;
 }
 
 /**
- * @brief xxx
+ * @brief Set pin number
  */
 void LedDriver::setPin(gpio_num_t ledPin){
     m_ledPin = ledPin;
 }
 
 /**
- * @brief xxx
+ * @brief Get pin number
  */
 gpio_num_t LedDriver::getPin(){
     return m_ledPin;
 }
 
 /**
- * @brief xxx
+ * @brief Initialize LedDriver -> init output pin
  */
 void LedDriver::init(){
     gpio_config_t io_conf;
@@ -44,14 +47,14 @@ void LedDriver::init(){
 }
 
 /**
- * @brief xxx
+ * @brief Switch on LED
  */
 void LedDriver::switchOn(){
     gpio_set_level(m_ledPin, 1);
 }
 
 /**
- * @brief xxx
+ * @brief Switch off LED
  */
 void LedDriver::switchOff(){
     gpio_set_level(m_ledPin, 0);

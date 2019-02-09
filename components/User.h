@@ -1,9 +1,12 @@
-/*
- * User.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 22.10.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 22.10.2018
- *      Author: HN
- */
+ * File       : User.h
+ * Purpose    : Represents a Rewardi user -> used for the owner of the Rewardi Box
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_USER_H_
 #define COMPONENTS_USER_H_

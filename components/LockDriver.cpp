@@ -1,9 +1,12 @@
-/*
- * LockDriver.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : LockDriver.cpp
+ * Purpose    : Driver for to switch the electromagnetic lock of the Rewardi Box
+ ********************************************************************************************/
 
 #include "LockDriver.h"
 #include <esp_log.h>
@@ -15,9 +18,8 @@
 static const char* LOG_TAG = "LockDriver";
 static std::map<void*, LockDriver*> lockDriverMap;
 
-
 /**
- * @brief xxx
+ * @brief LockDriver constructor -> needs pin number where lock is connected
  */
 LockDriver::LockDriver(gpio_num_t lockPin, Box* pBox){
     m_lockPin = lockPin;
@@ -25,27 +27,30 @@ LockDriver::LockDriver(gpio_num_t lockPin, Box* pBox){
     m_pBox = pBox;
 }
 
+/**
+ * @brief Destructor
+ */
 LockDriver::~LockDriver(){
     ::xTimerDelete(m_hTimeout, portMAX_DELAY);
     lockDriverMap.erase(m_hTimeout);
 }
 
 /**
- * @brief xxx
+ * @brief Set output pin
  */
 void LockDriver::setPin(gpio_num_t lockPin){
     m_lockPin = lockPin;
 }
 
 /**
- * @brief xxx
+ * @brief Get output pin
  */
 gpio_num_t LockDriver::getPin(){
     return m_lockPin;
 }
 
 /**
- * @brief xxx
+ * @brief Initialize LockDriver -> init output pin, create a timer (to switch off lock after 5s automatically) and map the LockDriver object to this timer
  */
 void LockDriver::init(){
     gpio_config_t io_conf;
@@ -63,7 +68,7 @@ void LockDriver::init(){
 }
 
 /**
- * @brief xxx
+ * @brief Switch on the lock (that means the box can be opened when the lock is powered / switched on)
  */
 void LockDriver::switchOn(){
     ESP_LOGD(LOG_TAG, "switchOn");
@@ -75,7 +80,7 @@ void LockDriver::switchOn(){
 }
 
 /**
- * @brief xxx
+ * @brief Switch off the lock
  */
 void LockDriver::switchOff(){
     ESP_LOGD(LOG_TAG, "switchOff, m_lockPin = %d", m_lockPin);
@@ -86,7 +91,7 @@ void LockDriver::switchOff(){
 }
 
 /**
- * @brief xxx
+ * @brief The lock is switched on for 5s - afterwards this timeout is called and the lock is switched off again
  */
 void LockDriver::timeout(TimerHandle_t xTimer){
     LockDriver* lockDriver = lockDriverMap.at(xTimer);

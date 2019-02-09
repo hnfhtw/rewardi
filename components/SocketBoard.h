@@ -1,9 +1,12 @@
-/*
- * SocketBoard.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 22.10.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 22.10.2018
- *      Author: HN
- */
+ * File       : SocketBoard.h
+ * Purpose    : Represents a Rewardi SocketBoard
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_SOCKETBOARD_H_
 #define COMPONENTS_SOCKETBOARD_H_

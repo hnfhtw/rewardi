@@ -1,9 +1,12 @@
-/*
- * BoxCodeParser.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 29.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 29.11.2018
- *      Author: HN
- */
+ * File       : BoxCodeParser.h
+ * Purpose    : Each Rewardi Box has a BoxCodeParser that parses user inputs on the push button
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_BOXCODEPARSER_H_
 #define COMPONENTS_BOXCODEPARSER_H_
@@ -24,7 +27,5 @@ private:
     ButtonDriver*   m_pButtonDriver;
     Box*            m_pBox;
 };
-
-
 
 #endif /* COMPONENTS_BOXCODEPARSER_H_ */

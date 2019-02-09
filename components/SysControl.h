@@ -1,9 +1,13 @@
-/*
- * SysControl.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 16.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 16.11.2018
- *      Author: HN
- */
+ * File       : SysControl.h
+ * Purpose    : Manages behavior (e.g. connect to Rewardi server)
+ *              and data that is common to both Rewardi Box and SocketBoard
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_SYSCONTROL_H_
 #define COMPONENTS_SYSCONTROL_H_

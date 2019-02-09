@@ -1,9 +1,12 @@
-/*
- * SocketBoard.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 22.10.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 22.10.2018
- *      Author: HN
- */
+ * File       : SocketBoard.cpp
+ * Purpose    : Represents a Rewardi SocketBoard
+ ********************************************************************************************/
 
 #include "SocketBoard.h"
 #include <map>
@@ -14,20 +17,19 @@
 static const char* LOG_TAG = "SocketBoard";
 static std::map<void*, SocketBoard*> socketBoardMap;
 
-
 /**
- * @brief Create a SocketBoard instance.
+ * @brief SocketBoard constructor - needs the output pin where the relais is connected
  */
 SocketBoard::SocketBoard(gpio_num_t relaisPin){
 	m_socketID	= 0;
 	m_maxTime	= 60;
-	m_pRelaisDriver = new RelaisDriver(relaisPin);
+	m_pRelaisDriver = new RelaisDriver(relaisPin);  // create RelaisDriver object
 	m_hTimeout = 0;
 	m_pCommHandler = nullptr;
 }
 
 /**
- * @brief xx
+ * @brief Destructor
  */
 SocketBoard::~SocketBoard(){
     ::xTimerDelete(m_hTimeout, portMAX_DELAY);
@@ -35,7 +37,8 @@ SocketBoard::~SocketBoard(){
 }
 
 /**
- * @brief xx
+ * @brief Initialize SocketBoard -> init RelaisDriver and create timer that switches off relais automatically after max_time
+ *        (if not switched off by the user earlier); map the SocketBoard object with this timer
  */
 void SocketBoard::init(){
     m_pRelaisDriver->init();
@@ -44,50 +47,49 @@ void SocketBoard::init(){
 }
 
 /**
- * @brief xx
+ * @brief Set ID of the SocketBoard (not used)
  */
 void SocketBoard::setSocketID(uint32_t socketID){
 	m_socketID = socketID;
 }
 
 /**
- * @brief xx
+ * @brief Set max time
  */
 void SocketBoard::setMaxTime(uint32_t maxTime){
 	m_maxTime = maxTime;
 }
 
 /**
- * @brief xx
+ * @brief Set pointer to CommHandler object
  */
 void SocketBoard::setCommHandler(CommHandler* pCommHandler){
     m_pCommHandler = pCommHandler;
 }
 
 /**
- * @brief xx
+ * @brief Get ID of SocketBoard (not used)
  */
 uint32_t SocketBoard::getSocketID(){
 	return m_socketID;
 }
 
-
 /**
- * @brief xx
+ * @brief Get max time
  */
 uint32_t SocketBoard::getMaxTime(){
 	return m_maxTime;
 }
 
 /**
- * @brief xx
+ * @brief Get pointer to RelaisDriver
  */
 RelaisDriver* SocketBoard::getRelaisDriver(){
     return m_pRelaisDriver;
 }
 
 /**
- * @brief xx
+ * @brief Switch on SocketBoard (relais) and start timer for auto switch-off after max time
  */
 void SocketBoard::switchOn(){
     if(m_pRelaisDriver != nullptr && m_maxTime != 0){
@@ -99,7 +101,7 @@ void SocketBoard::switchOn(){
 }
 
 /**
- * @brief xx
+ * @brief Switch off SocketBoard (relais)
  */
 uint32_t SocketBoard::switchOff(bool isTimeout){
     if(m_pRelaisDriver != nullptr){
@@ -126,7 +128,7 @@ uint32_t SocketBoard::switchOff(bool isTimeout){
 }
 
 /**
- * @brief xxx
+ * @brief Max_time timer -> when it expires this method is called and the SocketBoard relais is switched off
  */
 void SocketBoard::timeout(TimerHandle_t xTimer){
     SocketBoard* socketBoard = socketBoardMap.at(xTimer);

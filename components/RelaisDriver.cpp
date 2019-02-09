@@ -1,36 +1,38 @@
-/*
- * RelaisDriver.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : RelaisDriver.cpp
+ * Purpose    : Driver to switch the (monostable) relais of a Rewardi SocketBoard
+ ********************************************************************************************/
 
 #include "RelaisDriver.h"
 
-
 /**
- * @brief xxx
+ * @brief RelaisDriver constructor - needs the output pin where the relais is connected
  */
 RelaisDriver::RelaisDriver(gpio_num_t relaisPin){
     m_relaisPin = relaisPin;
 }
 
 /**
- * @brief xxx
+ * @brief Set the output pin
  */
 void RelaisDriver::setPin(gpio_num_t relaisPin){
     m_relaisPin = relaisPin;
 }
 
 /**
- * @brief xxx
+ * @brief Get the output pin
  */
 gpio_num_t RelaisDriver::getPin(){
     return m_relaisPin;
 }
 
 /**
- * @brief xxx
+ * @brief Initialize the RelaisDriver -> init the output pin
  */
 void RelaisDriver::init(){
     gpio_config_t io_conf;
@@ -45,14 +47,14 @@ void RelaisDriver::init(){
 }
 
 /**
- * @brief xxx
+ * @brief Switch (monostable) relais on
  */
 void RelaisDriver::switchOn(){
     gpio_set_level(m_relaisPin, 1);
 }
 
 /**
- * @brief xxx
+ * @brief Switch (monostable) relais off
  */
 void RelaisDriver::switchOff(){
     gpio_set_level(m_relaisPin, 0);

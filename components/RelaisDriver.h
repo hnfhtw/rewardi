@@ -1,9 +1,12 @@
-/*
- * RelaisDriver.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : RelaisDriver.h
+ * Purpose    : Driver to switch the (monostable) relais of a Rewardi SocketBoard
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_RELAISDRIVER_H_
 #define COMPONENTS_RELAISDRIVER_H_

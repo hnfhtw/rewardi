@@ -1,0 +1,4 @@
+key,type,encoding,value
+device_data,namespace,,
+trust_number,data,string,2043FE9E-F138-4856-BB09-33FC6925EA6D
+backend_url,data,string,37.60.168.102

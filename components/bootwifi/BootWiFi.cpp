@@ -1,3 +1,15 @@
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 09/2018 - 01/2019
+ * Author     : Harald Netzer
+ * Version    : 001
+ *
+ * File       : BootWiFi.cpp
+ *              Modified from: https://github.com/nkolban/esp32-snippets/tree/master/networking/bootwifi
+ * Purpose    : Connect to wireless AP (if SSID/PW stored); Open own access point if stored AP cannot
+ *              be reached.
+ ********************************************************************************************/
+
 /**
  * Bootwifi - Boot the WiFi environment.
  *
@@ -13,8 +25,6 @@
 #include <nvs_flash.h>
 #include <CPPNVS.h>
 #include <driver/gpio.h>
-//#include <tcpip_adapter.h>
-//#include <lwip/sockets.h>
 #include <WiFi.h>
 #include <string.h>
 #include <string>

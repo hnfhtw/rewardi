@@ -1,9 +1,12 @@
-/*
- * LedDriver.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : LedDriver.h
+ * Purpose    : Driver to switch an LED (three of these drivers are used for the RGB LED of the Rewardi Box)
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_LEDDRIVER_H_
 #define COMPONENTS_LEDDRIVER_H_

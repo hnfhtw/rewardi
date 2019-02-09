@@ -1,9 +1,13 @@
-/*
- * StandbyControl.cpp
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 18.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 18.11.2018
- *      Author: HN
- */
+ * File       : StandbyControl.cpp
+ * Purpose    : Module that sends ESP32 to deep sleep mode if requested, and wakes controller up
+ *              by push button press (in case of Rewardi Box)
+ ********************************************************************************************/
 
 #include "StandbyControl.h"
 #include "driver/rtc_io.h"
@@ -14,14 +18,14 @@
 static const char* LOG_TAG = "StandbyControl";
 
 /**
- * @brief xx
+ * @brief StandbyControl constructor - needs input pin where push button is connected (to wake up controller)
  */
 StandbyControl::StandbyControl(gpio_num_t wakeupPin){
-    m_wakeupPin = wakeupPin;    // GPIO_NUM_0
+    m_wakeupPin = wakeupPin;
 }
 
 /**
- * @brief xx
+ * @brief Initialize StandbyControl -> initialize the rtc functionality of the input pin (to wake up from deep sleep mode on button press)
  */
 void StandbyControl::init(){
     rtc_gpio_init(m_wakeupPin);
@@ -32,7 +36,7 @@ void StandbyControl::init(){
 }
 
 /**
- * @brief xx
+ * @brief Stop wifi and enter deep sleep mode
  */
 void StandbyControl::enterSleepMode(){
     ESP_LOGD(LOG_TAG, "Enter Sleep Mode");

@@ -1,9 +1,12 @@
-/*
- * CommHandler.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 03.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 03.11.2018
- *      Author: HN
- */
+ * File       : CommHandler.h
+ * Purpose    : Responsible for Websocket communication with Rewardi Server
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_COMMHANDLER_H_
 #define COMPONENTS_COMMHANDLER_H_

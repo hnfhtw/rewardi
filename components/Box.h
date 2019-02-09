@@ -1,9 +1,12 @@
-/*
- * Box.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 22.10.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 22.10.2018
- *      Author: HN
- */
+ * File       : Box.h
+ * Purpose    : Represents a Rewardi Box
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_BOX_H_
 #define COMPONENTS_BOX_H_

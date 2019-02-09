@@ -1,9 +1,12 @@
-/*
- * messageIDs.h
+/********************************************************************************************
+ * Project    : Rewardi
+ * Created on : 03.11.2018
+ * Author     : Harald Netzer
+ * Version    : 001
  *
- *  Created on: 03.11.2018
- *      Author: HN
- */
+ * File       : messageIDs.h
+ * Purpose    :
+ ********************************************************************************************/
 
 #ifndef COMPONENTS_MESSAGEIDS_H_
 #define COMPONENTS_MESSAGEIDS_H_
