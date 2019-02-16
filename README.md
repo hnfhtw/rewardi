@@ -1,5 +1,11 @@
-# Hello World Example
+# Rewardi - ESP32 Firmware
 
-Starts a FreeRTOS task to print "Hello World"
+To build it you need to set up your toolchain as described here:
+https://docs.espressif.com/projects/esp-idf/en/latest/get-started/get-started-devkitc.html
+https://docs.espressif.com/projects/esp-idf/en/latest/get-started/windows-setup.html
 
-See the README.md file in the upper level 'examples' directory for more information about examples.
+Using Eclipse to build:
+https://docs.espressif.com/projects/esp-idf/en/latest/get-started/eclipse-setup.html
+
+
+
